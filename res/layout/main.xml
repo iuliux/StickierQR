@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:orientation="vertical">
+
+   <FrameLayout android:id="@+id/action_bar"
+   				android:layout_width="fill_parent"
+             	android:layout_height="wrap_content">
+	  <LinearLayout android:id="@+id/action_bar"
+	  				android:layout_width="fill_parent"
+	               	android:layout_height="wrap_content"
+	               	android:layout_centerInParent="true"
+	               	android:orientation="horizontal"
+	               	android:gravity="right"
+	               	android:background="@drawable/ab_headtop">
+		<ImageView  android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:src="@drawable/delimit"
+	               	/>
+	   	<ImageView 	android:id="@+id/settings_action_button"
+					android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:paddingLeft="10dp"
+	               	android:paddingRight="10dp"
+	               	android:src="@drawable/settings"
+	               	/>
+	  </LinearLayout>
+   </FrameLayout>
+  
+  <FrameLayout  android:layout_width="fill_parent"
+             	android:layout_height="fill_parent">
+	  <SurfaceView android:id="@+id/camera_view"
+	               android:layout_width="fill_parent"
+	               android:layout_height="fill_parent"
+	               android:layout_centerInParent="true"/>
+	               
+	  <ro.pub.stickier.ViewfinderView
+	      			android:id="@+id/viewfinder_view"
+	      			android:layout_width="fill_parent"
+	      			android:layout_height="fill_parent"/>
+	      
+	  <ImageView 	android:id="@+id/actionbar_bottom"
+					android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:src="@drawable/ab_headbottom"
+	               	/>
+	               	
+	  <ro.pub.stickier.OverlayDrawer
+	  				android:id="@+id/drawer"
+	               	android:layout_width="fill_parent"
+	               	android:layout_height="fill_parent"/>
+   </FrameLayout>
+</LinearLayout>
