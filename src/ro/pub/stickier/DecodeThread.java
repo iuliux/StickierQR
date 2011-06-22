@@ -16,15 +16,12 @@
 
 package ro.pub.stickier;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.ResultPointCallback;
 
 import android.os.Handler;
 import android.os.Looper;
 
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -42,7 +39,6 @@ final class DecodeThread extends Thread {
   private final CountDownLatch handlerInitLatch;
 
   DecodeThread(CaptureActivity activity,
-               Vector<BarcodeFormat> decodeFormats,
                String characterSet) {
 
     this.activity = activity;

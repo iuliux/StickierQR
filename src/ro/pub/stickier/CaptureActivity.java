@@ -42,7 +42,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
 	private static final String TAG = CaptureActivity.class.getSimpleName();
 
-	private OverlayDrawer mDrawer;
+	private SurfaceView surfaceView;
+	private OverlayDrawer mOverlay;
 	private CaptureActivityHandler handler;
 	private ImageView settingsActionButton;
 	private ImageView expandActionButton;
@@ -65,7 +66,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		handler = null;
 
-		mDrawer = (OverlayDrawer) findViewById(R.id.drawer);
+		surfaceView = (SurfaceView) findViewById(R.id.camera_view);
+		mOverlay = (OverlayDrawer) findViewById(R.id.drawer);
 		settingsActionButton = (ImageView) findViewById(R.id.settings_action_button);
 		expandActionButton = (ImageView) findViewById(R.id.expand_action_button);
 		expandDelimiter = (ImageView) findViewById(R.id.expand_delimiter);
@@ -81,7 +83,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	public void onResume(){
 		super.onResume();
 
-		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.camera_view);
 		SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		if (hasSurface) {
 			// The activity was paused but not stopped, so the surface still exists. Therefore
@@ -125,7 +126,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			CameraManager.get().openDriver(surfaceHolder);
 			// Creating the handler starts the preview, which can also throw a RuntimeException.
 			if (handler == null) {
-				handler = new CaptureActivityHandler(this, decodeFormats, characterSet);
+				handler = new CaptureActivityHandler(this, characterSet);
 			}
 		} catch (IOException ioe) {
 			Log.w(TAG, ioe);
@@ -142,40 +143,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		return handler;
 	}
 
-	private void drawResultPoints(Bitmap barcode, Result rawResult) {
-		ResultPoint[] points = rawResult.getResultPoints();
-		if (points != null && points.length > 0) {
-			Canvas canvas = new Canvas(barcode);
-			Paint paint = new Paint();
-			paint.setColor(getResources().getColor(R.color.result_image_border));
-			paint.setStrokeWidth(3.0f);
-			paint.setStyle(Paint.Style.STROKE);
-			Rect border = new Rect(2, 2, barcode.getWidth() - 2, barcode.getHeight() - 2);
-			canvas.drawRect(border, paint);
-
-			paint.setColor(getResources().getColor(R.color.result_points));
-			if (points.length == 2) {
-				paint.setStrokeWidth(4.0f);
-				drawLine(canvas, paint, points[0], points[1]);
-			} else if (points.length == 4 &&
-					(rawResult.getBarcodeFormat().equals(BarcodeFormat.UPC_A) ||
-							rawResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13))) {
-				// Hacky special case -- draw two lines, for the barcode and metadata
-				drawLine(canvas, paint, points[0], points[1]);
-				drawLine(canvas, paint, points[2], points[3]);
-			} else {
-				paint.setStrokeWidth(10.0f);
-				for (ResultPoint point : points) {
-					canvas.drawPoint(point.getX(), point.getY(), paint);
-				}
-			}
-		}
-	}
-
-	private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b) {
-		canvas.drawLine(a.getX(), a.getY(), b.getX(), b.getY(), paint);
-	}
-
 	public void handleDecode(Result rawResult, Bitmap barcode) {
 		//inactivityTimer.onActivity();
 		lastResult = rawResult;
@@ -187,7 +154,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			handleDecodeInternally(rawResult, resultHandler, null);
 		} else {
 			//beepManager.playBeepSoundAndVibrate();
-			drawResultPoints(barcode, rawResult);
 			handleDecodeInternally(rawResult, resultHandler, barcode);
 			if (handler != null) {
 				handler.sendEmptyMessage(R.id.restart_preview);
@@ -195,15 +161,18 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		}
 	}
 
+	//E apelata cand un tag e gasit
+	//Se ocupa cu afisarea rezultatelor gasite
 	private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
-		//viewfinderView.setVisibility(View.GONE);
-
 		//ImageView barcodeImageView = (ImageView) findViewById(R.id.actionbar_bottom);
 		
 		if (barcode != null) {
 			//dimensiunile imaginii initiale
 			final int pic_width  = barcode.getWidth();
 			final int pic_height = barcode.getHeight();
+			//dimensiunile imaginii rotite
+			final int h = pic_width;
+			final int w = pic_height;
 			
 			//creeaza matricea de rotire
 			/*Matrix mtx = new Matrix();
@@ -213,19 +182,16 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			
 			//barcodeImageView.setImageBitmap(rotated);
 			
-			//dimensiunile imaginii rotite
-			final int h = pic_width;
-			final int w = pic_height;
-			
-			final float ratio = (float)mDrawer.getHeight() / (float)h; 
+			//rata de scalare necesara
+			final float ratio = (float)mOverlay.getHeight() / (float)h; 
 			Log.d(TAG, "Ratio: " + ratio);
 			
 			//extrage colturile
 			ResultPoint[] points = rawResult.getResultPoints();
 			
-			mDrawer.clear();
+			mOverlay.clear();
 			for(int i = 0; i < points.length; i++)
-				mDrawer.addPoint(ratio*(w-points[i].getY()), ratio * points[i].getX());
+				mOverlay.addPoint(ratio*(w-points[i].getY()), ratio * points[i].getX());
 			
 			showExpandActionButton();
 		}
@@ -233,18 +199,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		Functions.makeToast(resultHandler.getDisplayContents()+"", this);
 	}
 	
-	private void displayFrameworkBugMessageAndExit(String info) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.app_name));
-		builder.setMessage("["+info+"] "+getString(R.string.msg_camera_framework_bug));
-		builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
-		builder.setOnCancelListener(new FinishListener(this));
-		builder.show();
-	}
-	
-	public void drawOverlay() {
+	//Se ocupa de curatarea overlayului
+	//Apelata atunci cand pierde tagul
+	public void clearOverlay() {
 		hideExpandActionButton();
-		mDrawer.clear();
+		mOverlay.clear();
 	}
 	
 	public void showExpandActionButton(){
@@ -254,5 +213,15 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	public void hideExpandActionButton(){
 		expandActionButton.setVisibility(View.GONE);
 		expandDelimiter.setVisibility(View.GONE);
+	}
+	
+	
+	private void displayFrameworkBugMessageAndExit(String info) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.app_name));
+		builder.setMessage("["+info+"] "+getString(R.string.msg_camera_framework_bug));
+		builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
+		builder.setOnCancelListener(new FinishListener(this));
+		builder.show();
 	}
 }

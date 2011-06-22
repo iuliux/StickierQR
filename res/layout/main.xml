@@ -14,7 +14,24 @@
 	               	android:orientation="horizontal"
 	               	android:gravity="right"
 	               	android:background="@drawable/ab_headtop">
-		<ImageView  android:layout_width="wrap_content"
+	               	
+       	<ImageView  android:id="@+id/expand_delimiter"
+       				android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:src="@drawable/delimit"
+	               	android:visibility="gone"
+	               	/>
+	   	<ImageView 	android:id="@+id/expand_action_button"
+					android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:paddingLeft="10dp"
+	               	android:paddingRight="10dp"
+	               	android:src="@drawable/expand"
+	               	android:visibility="gone"
+	               	/>
+       	
+		<ImageView  android:id="@+id/settings_delimiter"
+					android:layout_width="wrap_content"
 	               	android:layout_height="wrap_content"
 	               	android:src="@drawable/delimit"
 	               	/>

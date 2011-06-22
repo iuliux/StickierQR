@@ -16,20 +16,14 @@
 
 package ro.pub.stickier;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import ro.pub.stickier.camera.CameraManager;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
-import java.util.Vector;
 
 /**
  * This class handles all the messaging which comprises the state machine for capture.
@@ -50,10 +44,9 @@ public final class CaptureActivityHandler extends Handler {
     DONE
   }
 
-  CaptureActivityHandler(CaptureActivity activity, Vector<BarcodeFormat> decodeFormats,
-      String characterSet) {
+  CaptureActivityHandler(CaptureActivity activity, String characterSet) {
     this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeFormats, characterSet);
+    decodeThread = new DecodeThread(activity, characterSet);
     decodeThread.start();
     state = State.SUCCESS;
 
@@ -91,11 +84,6 @@ public final class CaptureActivityHandler extends Handler {
         state = State.PREVIEW;
         CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
         break;
-      /*case R.id.return_scan_result:
-        Log.d(TAG, "Got return scan result message");
-        activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-        activity.finish();
-        break;*/
     }
   }
 
@@ -120,7 +108,7 @@ public final class CaptureActivityHandler extends Handler {
       state = State.PREVIEW;
       CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
       CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
-      activity.drawOverlay();
+      activity.clearOverlay();
     }
   }
 
