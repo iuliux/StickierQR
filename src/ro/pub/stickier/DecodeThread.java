@@ -43,8 +43,7 @@ final class DecodeThread extends Thread {
 
   DecodeThread(CaptureActivity activity,
                Vector<BarcodeFormat> decodeFormats,
-               String characterSet,
-               ResultPointCallback resultPointCallback) {
+               String characterSet) {
 
     this.activity = activity;
     handlerInitLatch = new CountDownLatch(1);
@@ -58,7 +57,7 @@ final class DecodeThread extends Thread {
     if (characterSet != null) {
       hints.put(DecodeHintType.CHARACTER_SET, characterSet);
     }
-    hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
+    //hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
   }
 
   Handler getHandler() {

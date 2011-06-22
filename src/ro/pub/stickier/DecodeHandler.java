@@ -18,10 +18,10 @@ package ro.pub.stickier;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 
 import ro.pub.stickier.camera.CameraManager;
 
@@ -38,12 +38,13 @@ final class DecodeHandler extends Handler {
   private static final String TAG = DecodeHandler.class.getSimpleName();
 
   private final CaptureActivity activity;
-  private final MultiFormatReader multiFormatReader;
+  private final QRCodeReader qrReader;
+  private final Hashtable<DecodeHintType, Object> hints;
   private boolean running = true;
 
   DecodeHandler(CaptureActivity activity, Hashtable<DecodeHintType, Object> hints) {
-    multiFormatReader = new MultiFormatReader();
-    multiFormatReader.setHints(hints);
+    qrReader = new QRCodeReader();
+    this.hints = hints;
     this.activity = activity;
   }
 
@@ -77,11 +78,11 @@ final class DecodeHandler extends Handler {
     PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
     BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
     try {
-      rawResult = multiFormatReader.decodeWithState(bitmap);
+      rawResult = qrReader.decode(bitmap,hints);
     } catch (ReaderException re) {
       // continue
     } finally {
-      multiFormatReader.reset();
+      qrReader.reset();
     }
 
     if (rawResult != null) {

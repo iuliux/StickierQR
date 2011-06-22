@@ -47,7 +47,7 @@ public class OverlayDrawer extends View {
 		
 		Log.d(TAG, "Point added!");
 	}
-	public void clearPoints(){
+	public void clear(){
 		pts.clear();
 		invalidate();
 		

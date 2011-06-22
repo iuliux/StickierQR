@@ -53,8 +53,7 @@ public final class CaptureActivityHandler extends Handler {
   CaptureActivityHandler(CaptureActivity activity, Vector<BarcodeFormat> decodeFormats,
       String characterSet) {
     this.activity = activity;
-    decodeThread = new DecodeThread(activity, decodeFormats, characterSet,
-        new ViewfinderResultPointCallback(activity.getViewfinderView()));
+    decodeThread = new DecodeThread(activity, decodeFormats, characterSet);
     decodeThread.start();
     state = State.SUCCESS;
 
@@ -121,7 +120,7 @@ public final class CaptureActivityHandler extends Handler {
       state = State.PREVIEW;
       CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
       CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
-      activity.drawViewfinder();
+      activity.drawOverlay();
     }
   }
 

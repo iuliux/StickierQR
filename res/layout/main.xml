@@ -34,11 +34,6 @@
 	               android:layout_width="fill_parent"
 	               android:layout_height="fill_parent"
 	               android:layout_centerInParent="true"/>
-	               
-	  <ro.pub.stickier.ViewfinderView
-	      			android:id="@+id/viewfinder_view"
-	      			android:layout_width="fill_parent"
-	      			android:layout_height="fill_parent"/>
 	      
 	  <ImageView 	android:id="@+id/actionbar_bottom"
 					android:layout_width="wrap_content"

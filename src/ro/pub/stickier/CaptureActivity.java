@@ -42,7 +42,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
 	private static final String TAG = CaptureActivity.class.getSimpleName();
 
-	private ViewfinderView viewfinderView;
 	private OverlayDrawer mDrawer;
 	private CaptureActivityHandler handler;
 	private boolean hasSurface;
@@ -63,7 +62,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		handler = null;
 
-		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+		mDrawer = (OverlayDrawer) findViewById(R.id.drawer);
 		ImageView settingsButton = (ImageView) findViewById(R.id.settings_action_button);
 
 		settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -138,10 +137,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		return handler;
 	}
 
-	ViewfinderView getViewfinderView() {
-		return viewfinderView;
-	}
-
 	private void drawResultPoints(Bitmap barcode, Result rawResult) {
 		ResultPoint[] points = rawResult.getResultPoints();
 		if (points != null && points.length > 0) {
@@ -199,7 +194,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		//viewfinderView.setVisibility(View.GONE);
 
 		ImageView barcodeImageView = (ImageView) findViewById(R.id.actionbar_bottom);
-		OverlayDrawer mDrawer = (OverlayDrawer) findViewById(R.id.drawer);
 		
 		if (barcode != null) {
 			//dimensiunile imaginii initiale
@@ -224,7 +218,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			//extrage pixelii
 			ResultPoint[] points = rawResult.getResultPoints();
 			
-			mDrawer.clearPoints();
+			mDrawer.clear();
 			for(int i = 0; i < points.length; i++)
 				mDrawer.addPoint(ratio*(w-points[i].getY()), ratio * points[i].getX());
 		}
@@ -324,7 +318,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		builder.show();
 	}
 	
-	public void drawViewfinder() {
-		viewfinderView.drawViewfinder();
+	public void drawOverlay() {
+		mDrawer.clear();
 	}
 }
