@@ -39,14 +39,12 @@ import java.util.List;
  */
 public final class ViewfinderView extends View {
 
-  private static final int[] SCANNER_ALPHA = {0, 64, 128, 192, 255, 192, 128, 64};
   private static final long ANIMATION_DELAY = 80L;
   private static final int CURRENT_POINT_OPACITY = 0xA0;
   private static final int MAX_RESULT_POINTS = 20;
 
   private final Paint paint;
   private Bitmap resultBitmap;
-  private final int maskColor;
   private final int resultColor;
   private final int resultPointColor;
   private List<ResultPoint> possibleResultPoints;
@@ -59,7 +57,6 @@ public final class ViewfinderView extends View {
     // Initialize these once for performance rather than calling them every time in onDraw().
     paint = new Paint();
     Resources resources = getResources();
-    maskColor = resources.getColor(R.color.viewfinder_mask);
     resultColor = resources.getColor(R.color.result_view);
     resultPointColor = resources.getColor(R.color.possible_result_points);
     possibleResultPoints = new ArrayList<ResultPoint>(5);
@@ -68,7 +65,7 @@ public final class ViewfinderView extends View {
 
   @Override
   public void onDraw(Canvas canvas) {
-    Rect frame = CameraManager.get().getFramingRect();
+    /*Rect frame = CameraManager.get().getFramingRect();
     if (frame == null) {
       return;
     }
@@ -114,7 +111,7 @@ public final class ViewfinderView extends View {
 
       // Request update of view
       postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);
-    }
+    }*/
   }
 
   public void drawViewfinder() {

@@ -228,6 +228,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			for(int i = 0; i < points.length; i++)
 				mDrawer.addPoint(ratio*(w-points[i].getY()), ratio * points[i].getX());
 		}
+		
+		Functions.makeToast(resultHandler.getDisplayContents()+"", this);
 	}
 	
 	

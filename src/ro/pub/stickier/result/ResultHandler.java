@@ -35,11 +35,9 @@ import android.app.Activity;
 public class ResultHandler {
 
   private final ParsedResult result;
-  private final Activity activity;
   private final Result rawResult;
 
   public ResultHandler(Activity activity, Result rawResult) {
-    this.activity = activity;
     this.rawResult = rawResult;
     result = parseResult(rawResult);
   }

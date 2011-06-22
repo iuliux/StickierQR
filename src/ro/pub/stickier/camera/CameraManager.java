@@ -69,7 +69,6 @@ public final class CameraManager {
   private Rect framingRectInPreview;
   private boolean initialized;
   private boolean previewing;
-  private boolean reverseImage;
   private final boolean useOneShotPreviewCallback;
   /**
    * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -134,12 +133,6 @@ public final class CameraManager {
       configManager.initFromCameraParameters(camera);
     }
     configManager.setDesiredCameraParameters(camera);
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    reverseImage = prefs.getBoolean(PreferencesActivity.KEY_REVERSE_IMAGE, false);
-    if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
-      FlashlightManager.enableFlashlight();
-    }
   }
 
   /**
@@ -147,7 +140,6 @@ public final class CameraManager {
    */
   public void closeDriver() {
     if (camera != null) {
-      FlashlightManager.disableFlashlight();
       camera.release();
       camera = null;
 
@@ -256,28 +248,6 @@ public final class CameraManager {
   }
 
   /**
-   * Allows third party apps to specify the scanning rectangle dimensions, rather than determine
-   * them automatically based on screen resolution.
-   *
-   * @param width The width in pixels to scan.
-   * @param height The height in pixels to scan.
-   */
-  public void setManualFramingRect(int width, int height) {
-    Point screenResolution = configManager.getScreenResolution();
-    if (width > screenResolution.x) {
-      width = screenResolution.x;
-    }
-    if (height > screenResolution.y) {
-      height = screenResolution.y;
-    }
-    int leftOffset = (screenResolution.x - width) / 2;
-    int topOffset = (screenResolution.y - height) / 2;
-    framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-    Log.d(TAG, "Calculated manual framing rect: " + framingRect);
-    framingRectInPreview = null;
-  }
-
-  /**
    * A factory method to build the appropriate LuminanceSource object based on the format
    * of the preview buffers, as described by Camera.Parameters.
    *
@@ -299,13 +269,13 @@ public final class CameraManager {
       // about the Y channel, so allow it.
       case PixelFormat.YCbCr_422_SP:
         return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-            rect.width(), rect.height(), reverseImage);
+            rect.width(), rect.height(), false);
       default:
         // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
         // Fortunately, it too has all the Y data up front, so we can read it.
         if ("yuv420p".equals(previewFormatString)) {
           return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-              rect.width(), rect.height(), reverseImage);
+              rect.width(), rect.height(), false);
         }
     }
     throw new IllegalArgumentException("Unsupported picture format: " +
