@@ -44,6 +44,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
 	private OverlayDrawer mDrawer;
 	private CaptureActivityHandler handler;
+	private ImageView settingsActionButton;
+	private ImageView expandActionButton;
+	private ImageView expandDelimiter;
 	private boolean hasSurface;
 	private Vector<BarcodeFormat> decodeFormats;
 	//private HistoryManager historyManager;
@@ -63,9 +66,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		handler = null;
 
 		mDrawer = (OverlayDrawer) findViewById(R.id.drawer);
-		ImageView settingsButton = (ImageView) findViewById(R.id.settings_action_button);
+		settingsActionButton = (ImageView) findViewById(R.id.settings_action_button);
+		expandActionButton = (ImageView) findViewById(R.id.expand_action_button);
+		expandDelimiter = (ImageView) findViewById(R.id.expand_delimiter);
 
-		settingsButton.setOnClickListener(new View.OnClickListener() {
+		settingsActionButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent().setClass(CaptureActivity.this, PreferencesActivity.class));
 			}
@@ -193,7 +198,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
 		//viewfinderView.setVisibility(View.GONE);
 
-		ImageView barcodeImageView = (ImageView) findViewById(R.id.actionbar_bottom);
+		//ImageView barcodeImageView = (ImageView) findViewById(R.id.actionbar_bottom);
 		
 		if (barcode != null) {
 			//dimensiunile imaginii initiale
@@ -201,10 +206,10 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			final int pic_height = barcode.getHeight();
 			
 			//creeaza matricea de rotire
-			Matrix mtx = new Matrix();
+			/*Matrix mtx = new Matrix();
 			mtx.postRotate(90);
 			//roteste bitmapul
-			Bitmap rotated = Bitmap.createBitmap(barcode, 0, 0, pic_width, pic_height, mtx, true);
+			Bitmap rotated = Bitmap.createBitmap(barcode, 0, 0, pic_width, pic_height, mtx, true);*/
 			
 			//barcodeImageView.setImageBitmap(rotated);
 			
@@ -215,99 +220,18 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			final float ratio = (float)mDrawer.getHeight() / (float)h; 
 			Log.d(TAG, "Ratio: " + ratio);
 			
-			//extrage pixelii
+			//extrage colturile
 			ResultPoint[] points = rawResult.getResultPoints();
 			
 			mDrawer.clear();
 			for(int i = 0; i < points.length; i++)
 				mDrawer.addPoint(ratio*(w-points[i].getY()), ratio * points[i].getX());
+			
+			showExpandActionButton();
 		}
 		
 		Functions.makeToast(resultHandler.getDisplayContents()+"", this);
 	}
-	
-	
-	
-	/*
-	 * Code to extract a points from a group of other points 
-	 */
-	
-	/*
-	 * Make a matrix
-	 */
-	private int[][] extractMatrix(int[] vector, int w, int h){
-        int[][] matrix = new int[w][h];
-    
-        /*
-         * i-coloana (dupa width)
-         * j-linia (dupa height)
-         */
-        for(int i = 0; i < w; i++)
-            for(int j = 0; j < h; j++){
-                matrix[i][j] =  vector[j * w + i];
-            }
-    
-        return matrix;
-    }
-	
-	/*
-     * Primeste un punct in matrice
-     * Verifica daca nu este greyscale
-     * 
-     * Daca nu este il face si verifica vecinii
-     */
-    private void fillWithWhite(int i, int j, int[][] matrix){
-        
-        int red = (matrix[i][j] >> 16) & 0xff;
-        int green = (matrix[i][j] >> 8) & 0xff;
-        int blue = matrix[i][j] & 0xff;
-         
-        /*
-         * If not greyscale 
-         */
-        if (red != green || green != blue ){
-            
-            matrix[i][j] = Color.WHITE;
-            
-            //sus 
-            if (i>0){
-                fillWithWhite(i-1,j,matrix);
-            }
-            
-            //jos 
-            if (i<matrix.length-1){
-                fillWithWhite(i+1,j,matrix);
-            }
-            //stanga 
-            if (j>0){
-                fillWithWhite(i,j-1,matrix);
-            }
-            //dreapta
-            if (j<matrix[0].length-1){
-                fillWithWhite(i,j+1,matrix);
-            }
-            //sus-stanga 
-            if (i>0 && j>0){
-                fillWithWhite(i-1,j-1,matrix);
-            }
-            //sus-dreapta
-            if (i>0 && j<matrix[0].length-1){
-                fillWithWhite(i-1,j+1,matrix);
-            }
-            
-            //jos-stanga 
-            if (i<matrix.length-1 && j>0){
-                fillWithWhite(i+1,j-1,matrix);
-            }
-            //jos-dreapta
-            if (i<matrix.length-1 && j<matrix[0].length-1){
-                fillWithWhite(i+1,j+1,matrix);
-            }
-        }
-        
-    }
-
-	
 	
 	private void displayFrameworkBugMessageAndExit(String info) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -319,6 +243,16 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	}
 	
 	public void drawOverlay() {
+		hideExpandActionButton();
 		mDrawer.clear();
+	}
+	
+	public void showExpandActionButton(){
+		expandActionButton.setVisibility(View.VISIBLE);
+		expandDelimiter.setVisibility(View.VISIBLE);
+	}
+	public void hideExpandActionButton(){
+		expandActionButton.setVisibility(View.GONE);
+		expandDelimiter.setVisibility(View.GONE);
 	}
 }

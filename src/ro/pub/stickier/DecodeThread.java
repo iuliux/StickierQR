@@ -50,14 +50,9 @@ final class DecodeThread extends Thread {
 
     hints = new Hashtable<DecodeHintType, Object>(3);
 
-    decodeFormats = new Vector<BarcodeFormat>();
-    decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-    hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-
     if (characterSet != null) {
       hints.put(DecodeHintType.CHARACTER_SET, characterSet);
     }
-    //hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
   }
 
   Handler getHandler() {
