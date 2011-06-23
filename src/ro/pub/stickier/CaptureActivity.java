@@ -34,6 +34,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -188,10 +190,23 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			
 			//extrage colturile
 			ResultPoint[] points = rawResult.getResultPoints();
+			//si le transforma
+			//	(rotire 90 de grade)
+			//	(scalare cu ratio)
+			float[] transformedPoints = new float[2 * points.length];
+			int j = 0;
+			for(int i = 0; i < points.length; i++){
+				transformedPoints[j++] = ratio*(w-points[i].getY()); //X
+				transformedPoints[j++] = ratio * points[i].getX(); //Y
+			}
 			
 			mOverlay.clear();
-			for(int i = 0; i < points.length; i++)
-				mOverlay.addPoint(ratio*(w-points[i].getY()), ratio * points[i].getX());
+			mOverlay.addPoints(transformedPoints);
+			
+			/*ImageView wait = (ImageView) findViewById(R.id.waiting);
+			wait.setVisibility(View.VISIBLE);
+			Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
+			wait.startAnimation(animation);*/
 			
 			showExpandActionButton();
 		}

@@ -2,8 +2,13 @@ package ro.pub.stickier;
 
 import java.util.ArrayList;
 
+import com.google.zxing.common.Collections;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,11 +21,19 @@ public class OverlayDrawer extends View {
 	private Paint paint;
 	private ArrayList<Float> pts;
 	
+	private float lastPtX;
+	private float lastPtY;
+	private float destPtX;
+	private float destPtY;
+	private String lastSticker;
+	
 	public OverlayDrawer(Context context, AttributeSet attrs){
 		super(context, attrs);
 		paint = new Paint();
 		paint.setARGB(255, 10, 200, 10);
 		paint.setStrokeWidth(8.0f);
+		
+		lastSticker = "";
 		
 		pts = new ArrayList<Float>();
 	}
@@ -28,49 +41,43 @@ public class OverlayDrawer extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		if(!pts.isEmpty()){
-			float[] ptsArr = new float[pts.size()];
-	
+			/*for (int i = 0; i < pts.size(); i++)
+				Log.d(TAG, "["+i+"] "+ptsArr[i]);*/
 			
-			for (int i = 0; i < pts.size(); i++) {
-			    Float f = pts.get(i);
-			    ptsArr[i] = (f != null ? f : Float.NaN); // Or whatever default you want.
-			}
+			/*final float m = (ptsArr[4] - ptsArr[2]) / (ptsArr[5] - ptsArr[3]);
+			final float rAng = (float)Math.toDegrees(Math.atan(m));
+			Log.d(TAG, "rAng = "+rAng);*/
 			
-			Log.d(TAG, "pts.size() = "+pts.size()); 
-			if(pts.size() == 6){
-				for (int i = 0; i < pts.size(); i++)
-					Log.d(TAG, "["+i+"] "+ptsArr[i]);
-				
-				final float d12 = distance(ptsArr[0], ptsArr[1], ptsArr[2], ptsArr[3]);
-				final float d23 = distance(ptsArr[2], ptsArr[3], ptsArr[4], ptsArr[5]);
-				final float d13 = distance(ptsArr[0], ptsArr[1], ptsArr[4], ptsArr[5]);
-				
-				Log.d(TAG, "d 1->2 "+d12);
-				Log.d(TAG, "d 2->3 "+d23);
-				Log.d(TAG, "d 1->3 "+d13);
-				
-				//TODO: calculare unghiuri si determinare pe cel de (cat mai) 90 grade
-				
-				canvas.drawLine(ptsArr[0], ptsArr[1], ptsArr[2], ptsArr[3], paint);
-				canvas.drawLine(ptsArr[0], ptsArr[1], ptsArr[4], ptsArr[5], paint);
-				canvas.drawLine(ptsArr[4], ptsArr[5], ptsArr[2], ptsArr[3], paint);
-			}else{
-				canvas.drawPoints(ptsArr, paint);
-				Log.d(TAG, "Overlay ReDrawn!");
-			}
+			Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fav);
+			Matrix  mMatrix = new Matrix();
+			final float[] src = new float[]{0, 0, 0, mBitmap.getHeight(), mBitmap.getWidth(), 0};
+			final float[] dst = new float[]{pts.get(2), pts.get(3), pts.get(0), pts.get(1), pts.get(4), pts.get(5)};
+			
+			canvas.save();
+			mMatrix.setPolyToPoly(src, 0, dst, 0, src.length >> 1);
+            canvas.concat(mMatrix);
+			canvas.drawBitmap(mBitmap, 0, 0, paint);
+			canvas.restore();
+			
+			//afiseaza punctul albastru in coltul stanga sus
+			/*Paint paint2 = new Paint(paint);
+			paint2.setARGB(255, 10, 0, 200);
+
+			canvas.drawPoint(pts.get(2), pts.get(3), paint2);*/
 		}
 	}
 	
-	private float distance(float p1x, float p1y, float p2x, float p2y){
+	/*private float distance(float p1x, float p1y, float p2x, float p2y){
 		return (float)Math.sqrt((p1x - p1y)*(p1x - p1y) + (p2x - p2y)*(p2x - p2y));
-	}
+	}*/
 	
-	public void addPoint(float x, float y){
-		pts.add(x);
-		pts.add(y);
+	public void addPoints(float[] points){
+		for(int i = 0; i < points.length; i++){
+			pts.add(points[i]);
+		}
 		invalidate();
 		
-		Log.d(TAG, "Point added!");
+		Log.d(TAG, "Points added!");
 	}
 	public void clear(){
 		pts.clear();

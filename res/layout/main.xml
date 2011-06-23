@@ -58,9 +58,18 @@
 	               	android:src="@drawable/ab_headbottom"
 	               	/>
 	               	
+      <ImageView	android:id="@+id/waiting"
+      				android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:src="@drawable/waiting"
+	               	android:layout_gravity="center_vertical|center_horizontal"
+	               	android:visibility="gone"
+	               	/>
+	               	
 	  <ro.pub.stickier.OverlayDrawer
 	  				android:id="@+id/drawer"
 	               	android:layout_width="fill_parent"
-	               	android:layout_height="fill_parent"/>
+	               	android:layout_height="fill_parent"
+	               	/>
    </FrameLayout>
 </LinearLayout>
