@@ -19,6 +19,7 @@ public class OverlayDrawer extends View {
 	private static final String TAG = OverlayDrawer.class.getSimpleName();
 	
 	private Paint paint;
+	private Bitmap mBitmap;
 	private ArrayList<Float> pts;
 	
 	private float lastPtX;
@@ -32,6 +33,9 @@ public class OverlayDrawer extends View {
 		paint = new Paint();
 		paint.setARGB(255, 10, 200, 10);
 		paint.setStrokeWidth(8.0f);
+		
+		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fav);
+		mBitmap.prepareToDraw();
 		
 		lastSticker = "";
 		
@@ -48,7 +52,6 @@ public class OverlayDrawer extends View {
 			final float rAng = (float)Math.toDegrees(Math.atan(m));
 			Log.d(TAG, "rAng = "+rAng);*/
 			
-			Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fav);
 			Matrix  mMatrix = new Matrix();
 			final float[] src = new float[]{0, 0, 0, mBitmap.getHeight(), mBitmap.getWidth(), 0};
 			final float[] dst = new float[]{pts.get(2), pts.get(3), pts.get(0), pts.get(1), pts.get(4), pts.get(5)};

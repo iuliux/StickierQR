@@ -73,6 +73,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		settingsActionButton = (ImageView) findViewById(R.id.settings_action_button);
 		expandActionButton = (ImageView) findViewById(R.id.expand_action_button);
 		expandDelimiter = (ImageView) findViewById(R.id.expand_delimiter);
+		
+		mOverlay.setDrawingCacheEnabled(true);
 
 		settingsActionButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -205,13 +207,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			
 			/*ImageView wait = (ImageView) findViewById(R.id.waiting);
 			wait.setVisibility(View.VISIBLE);
+			wait.setDrawingCacheEnabled(true);
 			Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
 			wait.startAnimation(animation);*/
 			
 			showExpandActionButton();
 		}
 		
-		Functions.makeToast(resultHandler.getDisplayContents()+"", this);
+		//Functions.makeToast(resultHandler.getDisplayContents()+"", this);
 	}
 	
 	//Se ocupa de curatarea overlayului
