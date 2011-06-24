@@ -22,6 +22,14 @@ public class OverlayDrawer extends View {
 	private Bitmap mBitmap;
 	private ArrayList<Float> pts;
 	
+	//rata de scalare (marire) a pozei afisate
+	private float scaleRatio = 0.4f;
+	//deplasarea in directia stanga sus a pozei
+	private float xOffset;
+	private float yOffset;
+	private int mBmpHeight;
+	private int mBmpWidth;
+	
 	private float lastPtX;
 	private float lastPtY;
 	private float destPtX;
@@ -34,8 +42,15 @@ public class OverlayDrawer extends View {
 		paint.setARGB(255, 10, 200, 10);
 		paint.setStrokeWidth(8.0f);
 		
+		//de mutat in functia in care primeste poza de afisat
 		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fav);
 		mBitmap.prepareToDraw();
+		mBmpHeight = mBitmap.getHeight();
+		mBmpWidth = mBitmap.getWidth();
+		
+		xOffset = -(float)((scaleRatio - 1) * mBmpWidth) / 2.0f;
+		yOffset = -(float)((scaleRatio - 1) * mBmpHeight) / 2.0f;
+		//---
 		
 		lastSticker = "";
 		
@@ -53,8 +68,14 @@ public class OverlayDrawer extends View {
 			Log.d(TAG, "rAng = "+rAng);*/
 			
 			Matrix  mMatrix = new Matrix();
-			final float[] src = new float[]{0, 0, 0, mBitmap.getHeight(), mBitmap.getWidth(), 0};
-			final float[] dst = new float[]{pts.get(2), pts.get(3), pts.get(0), pts.get(1), pts.get(4), pts.get(5)};
+			final float[] src = new float[]{
+					xOffset, yOffset,
+					xOffset, yOffset + mBitmap.getHeight() * scaleRatio,
+					xOffset + mBitmap.getWidth() * scaleRatio, yOffset};
+			final float[] dst = new float[]{
+					pts.get(2), pts.get(3), 
+					pts.get(0), pts.get(1),
+					pts.get(4), pts.get(5)};
 			
 			canvas.save();
 			mMatrix.setPolyToPoly(src, 0, dst, 0, src.length >> 1);
@@ -65,7 +86,6 @@ public class OverlayDrawer extends View {
 			//afiseaza punctul albastru in coltul stanga sus
 			/*Paint paint2 = new Paint(paint);
 			paint2.setARGB(255, 10, 0, 200);
-
 			canvas.drawPoint(pts.get(2), pts.get(3), paint2);*/
 		}
 	}
