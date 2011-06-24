@@ -26,9 +26,9 @@
         android:title="@string/preferences_vibrate_title"/>
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_login_title">
-    <EditTextPreference
+    <ro.pub.stickier.LoginDialogPreferences
         android:key="preferences_user"
-        android:title="@string/preferences_login_user"
-        android:summary="@string/preferences_login_user_summary"/>
+        android:title="@string/preferences_login_info"
+        android:summary="@string/preferences_login_summary"/>
   </PreferenceCategory>
 </PreferenceScreen>

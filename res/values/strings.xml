@@ -11,6 +11,8 @@
 	<string name="preferences_play_beep_title">Beep</string>
 	<string name="preferences_vibrate_title">Vibrate</string>
 	<string name="preferences_login_title">Login info</string>
-	<string name="preferences_login_user">User name</string>
-	<string name="preferences_login_user_summary">If you have a user name, you will receive information specific to your role.</string>
+	<string name="preferences_login_info">Your login informations</string>
+	<string name="preferences_login_user">User name:</string>
+	<string name="preferences_login_pass">Password:</string>
+	<string name="preferences_login_summary">If you have a user name, you will receive information specific to your role.</string>
 </resources>
