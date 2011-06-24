@@ -31,13 +31,15 @@ import java.util.Collection;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class PreferencesActivity extends PreferenceActivity
-implements OnSharedPreferenceChangeListener {
+public final class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	
+	private static final String TAG = ro.pub.stickier.PreferencesActivity.class.getSimpleName();
 
 	public static final String KEY_PLAY_BEEP = "preferences_play_beep";
 	public static final String KEY_VIBRATE = "preferences_vibrate";
 	
 	public static final String KEY_USER = "preferences_user";
+	public static final String KEY_PASS = "preferences_pass";
 
 	public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
 
