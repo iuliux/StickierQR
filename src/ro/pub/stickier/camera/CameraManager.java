@@ -69,9 +69,6 @@ public final class CameraManager {
    */
   private final PreviewCallback previewCallback;
 
-  /** Autofocus callbacks arrive here, and are dispatched to the Handler which requested them. */
-  private final AutoFocusCallback autoFocusCallback;
-
   /**
    * Initializes this static object with the Context of the calling Activity.
    *
@@ -104,7 +101,6 @@ public final class CameraManager {
     useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > 3; // 3 = Cupcake
 
     previewCallback = new PreviewCallback(configManager, useOneShotPreviewCallback);
-    autoFocusCallback = new AutoFocusCallback();
   }
 
   /**
@@ -163,7 +159,6 @@ public final class CameraManager {
       }
       camera.stopPreview();
       previewCallback.setHandler(null, 0);
-      autoFocusCallback.setHandler(null, 0);
       previewing = false;
     }
   }
@@ -195,9 +190,8 @@ public final class CameraManager {
    */
   public void requestAutoFocus(Handler handler, int message) {
     if (camera != null && previewing) {
-      autoFocusCallback.setHandler(handler, message);
-      //Log.d(TAG, "Requesting auto-focus callback");
-      camera.autoFocus(autoFocusCallback);
+      //Log.d(TAG, "Requesting auto-focus");
+      camera.autoFocus(null);
     }
   }
 

@@ -20,7 +20,6 @@ public class OverlayDrawer extends View {
 	
 	private Paint paint;
 	private Bitmap mBitmap;
-	private ArrayList<Float> pts;
 	
 	//rata de scalare (marire) a pozei afisate
 	private float scaleRatio = 0.4f;
@@ -30,11 +29,7 @@ public class OverlayDrawer extends View {
 	private int mBmpHeight;
 	private int mBmpWidth;
 	
-	private float lastPtX;
-	private float lastPtY;
-	private float destPtX;
-	private float destPtY;
-	private String lastSticker;
+	private PolyState mCurrent;
 	
 	public OverlayDrawer(Context context, AttributeSet attrs){
 		super(context, attrs);
@@ -52,30 +47,28 @@ public class OverlayDrawer extends View {
 		yOffset = -(float)((scaleRatio - 1) * mBmpHeight) / 2.0f;
 		//---
 		
-		lastSticker = "";
-		
-		pts = new ArrayList<Float>();
+		mCurrent = null;
 	}
 	
 	@Override
 	public void onDraw(Canvas canvas) {
-		if(!pts.isEmpty()){
-			/*for (int i = 0; i < pts.size(); i++)
-				Log.d(TAG, "["+i+"] "+ptsArr[i]);*/
-			
-			/*final float m = (ptsArr[4] - ptsArr[2]) / (ptsArr[5] - ptsArr[3]);
-			final float rAng = (float)Math.toDegrees(Math.atan(m));
-			Log.d(TAG, "rAng = "+rAng);*/
+		if(mCurrent != null){
 			
 			Matrix  mMatrix = new Matrix();
 			final float[] src = new float[]{
 					xOffset, yOffset,
 					xOffset, yOffset + mBitmap.getHeight() * scaleRatio,
 					xOffset + mBitmap.getWidth() * scaleRatio, yOffset};
-			final float[] dst = new float[]{
+			/*final float[] dst = new float[]{
 					pts.get(2), pts.get(3), 
 					pts.get(0), pts.get(1),
-					pts.get(4), pts.get(5)};
+					pts.get(4), pts.get(5)};*/
+			
+			//voi primi toate coordonatele aici, pentru ca voi calcula pt fiecare punct in parte
+			final float[] dst = new float[]{
+					mCurrent.ul[0], mCurrent.ul[1], 
+					mCurrent.bl[0], mCurrent.bl[1],
+					mCurrent.ur[0], mCurrent.ur[1]};
 			
 			canvas.save();
 			mMatrix.setPolyToPoly(src, 0, dst, 0, src.length >> 1);
@@ -86,26 +79,14 @@ public class OverlayDrawer extends View {
 			//afiseaza punctul albastru in coltul stanga sus
 			/*Paint paint2 = new Paint(paint);
 			paint2.setARGB(255, 10, 0, 200);
-			canvas.drawPoint(pts.get(2), pts.get(3), paint2);*/
+			canvas.drawPoint(mCurrent.ul[0], mCurrent.ul[1], paint2);
+
+			Log.d(TAG, "ReDrawn!");*/
 		}
 	}
 	
-	/*private float distance(float p1x, float p1y, float p2x, float p2y){
-		return (float)Math.sqrt((p1x - p1y)*(p1x - p1y) + (p2x - p2y)*(p2x - p2y));
-	}*/
-	
-	public void addPoints(float[] points){
-		for(int i = 0; i < points.length; i++){
-			pts.add(points[i]);
-		}
-		invalidate();
-		
-		Log.d(TAG, "Points added!");
-	}
-	public void clear(){
-		pts.clear();
-		invalidate();
-		
-		Log.d(TAG, "Points list cleared!");
+	public void recieve(PolyState poly){
+		mCurrent = poly;
+		//Log.d(TAG, "Recieved!");
 	}
 }

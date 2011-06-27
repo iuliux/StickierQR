@@ -55,6 +55,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	//private HistoryManager historyManager;
 	private Result lastResult;
 	private String characterSet;
+	
+	private Handler mTransitionHandler;
+	private TransitionThread transition;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		CameraManager.init(getApplication());
 		hasSurface = false;
 		handler = null;
+		transition = null;
 
 		surfaceView = (SurfaceView) findViewById(R.id.camera_view);
 		mOverlay = (OverlayDrawer) findViewById(R.id.drawer);
@@ -75,10 +79,19 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		expandDelimiter = (ImageView) findViewById(R.id.expand_delimiter);
 		
 		mOverlay.setDrawingCacheEnabled(true);
+		
+		
+		//mHandler= new Handler();
+		
 
 		settingsActionButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent().setClass(CaptureActivity.this, PreferencesActivity.class));
+			}
+		});
+		mOverlay.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent().setClass(CaptureActivity.this, DisplayActivity.class));
 			}
 		});
 	}
@@ -107,6 +120,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			handler.quitSynchronously();
 			handler = null;
 		}
+		
+		if (transition != null) {
+			transition.getHandler().removeCallbacks(transition);
+			transition.interrupt();
+			transition = null;
+			mTransitionHandler = null;
+		}
+		
 		CameraManager.get().closeDriver();
 	}
 
@@ -132,6 +153,15 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			if (handler == null) {
 				handler = new CaptureActivityHandler(this, characterSet);
 			}
+			
+			if (transition == null) {
+				transition = new TransitionThread(mOverlay);
+				transition.start();
+				mTransitionHandler = transition.getHandler();
+			}
+			
+			//handler.sendEmptyMessage(R.id.auto_focus);
+			
 		} catch (IOException ioe) {
 			Log.w(TAG, ioe);
 			displayFrameworkBugMessageAndExit("IOException");
@@ -148,7 +178,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	}
 
 	public void handleDecode(Result rawResult, Bitmap barcode) {
-		//inactivityTimer.onActivity();
 		lastResult = rawResult;
 		ResultHandler resultHandler = new ResultHandler(this, rawResult);
 		//historyManager.addHistoryItem(rawResult, resultHandler);
@@ -171,6 +200,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		//ImageView barcodeImageView = (ImageView) findViewById(R.id.actionbar_bottom);
 		
 		if (barcode != null) {
+			
 			//dimensiunile imaginii initiale
 			final int pic_width  = barcode.getWidth();
 			final int pic_height = barcode.getHeight();
@@ -195,15 +225,15 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			//si le transforma
 			//	(rotire 90 de grade)
 			//	(scalare cu ratio)
-			float[] transformedPoints = new float[2 * points.length];
+			float[] transformedPoints = new float[6];
 			int j = 0;
-			for(int i = 0; i < points.length; i++){
+			for(int i = 0; i < 3; i++){
 				transformedPoints[j++] = ratio*(w-points[i].getY()); //X
 				transformedPoints[j++] = ratio * points[i].getX(); //Y
 			}
 			
-			mOverlay.clear();
-			mOverlay.addPoints(transformedPoints);
+			mTransitionHandler.sendMessage(Message.obtain(
+					mTransitionHandler, R.id.new_objective, new PolyState(transformedPoints, "test")));
 			
 			/*ImageView wait = (ImageView) findViewById(R.id.waiting);
 			wait.setVisibility(View.VISIBLE);
@@ -213,24 +243,22 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			
 			showExpandActionButton();
 		}
-		
-		//Functions.makeToast(resultHandler.getDisplayContents()+"", this);
 	}
 	
 	//Se ocupa de curatarea overlayului
 	//Apelata atunci cand pierde tagul
-	public void clearOverlay() {
-		hideExpandActionButton();
-		mOverlay.clear();
+	public void hideExpandActionButton() {
+		expandActionButton.setVisibility(View.GONE);
+		expandDelimiter.setVisibility(View.GONE);
 	}
 	
 	public void showExpandActionButton(){
 		expandActionButton.setVisibility(View.VISIBLE);
 		expandDelimiter.setVisibility(View.VISIBLE);
 	}
-	public void hideExpandActionButton(){
-		expandActionButton.setVisibility(View.GONE);
-		expandDelimiter.setVisibility(View.GONE);
+	
+	public OverlayDrawer getOverlay(){
+		return mOverlay;
 	}
 	
 	
