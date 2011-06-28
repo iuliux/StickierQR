@@ -51,12 +51,6 @@
 	               android:layout_width="fill_parent"
 	               android:layout_height="fill_parent"
 	               android:layout_centerInParent="true"/>
-	      
-	  <ImageView 	android:id="@+id/actionbar_bottom"
-					android:layout_width="wrap_content"
-	               	android:layout_height="wrap_content"
-	               	android:src="@drawable/ab_headbottom"
-	               	/>
 	               	
       <ImageView	android:id="@+id/waiting"
       				android:layout_width="wrap_content"
@@ -70,6 +64,12 @@
 	  				android:id="@+id/drawer"
 	               	android:layout_width="fill_parent"
 	               	android:layout_height="fill_parent"
+	               	/>
+	               	
+   	  <ImageView 	android:id="@+id/actionbar_bottom"
+					android:layout_width="wrap_content"
+	               	android:layout_height="wrap_content"
+	               	android:src="@drawable/ab_headbottom"
 	               	/>
    </FrameLayout>
 </LinearLayout>
