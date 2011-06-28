@@ -69,13 +69,18 @@ public class TransitionThread extends Thread {
 						vX = (float)Math.cos(angle) * initV;
 						vY = (float)Math.sin(angle) * initV;
 						//Log.d(TAG, "angle = " + Math.toDegrees(angle));
-						
+
 						//from Galileo's equation results:  a = -(v0 ^ 2) / (2 * d)
 						final float dist = (float)Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
 						a = -(initV * initV) / (2.0f * dist);
-						Log.d(TAG, "a = " + a);
+						//Log.d(TAG, "a = " + a);
 					}
 					//notez timpul pentru a masura timeoutul
+					
+					break;
+					
+				//Starts the timeout timer
+				case R.id.start_timeout:
 					startTime = System.currentTimeMillis();
 					break;
 				}

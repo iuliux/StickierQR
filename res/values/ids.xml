@@ -28,4 +28,5 @@
   <item type="id" name="timeout"/>
   
   <item type="id" name="new_objective"/>
+  <item type="id" name="start_timeout"/>
 </resources>

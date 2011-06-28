@@ -222,12 +222,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			corner[0] = ratio*(w-points[1].getY()); //X
 			corner[1] = ratio * points[1].getX(); //Y
 			
+			//calculeaza distanta
 			final float currentDistance = (float)
 				Math.sqrt((lastBarcodePosition[0] - corner[0]) *
 						(lastBarcodePosition[0] - corner[0]) +
 					(lastBarcodePosition[1] - corner[1]) * (lastBarcodePosition[1] - corner[1]));
-
-			Log.d(TAG, "currentDistance = "+currentDistance);
 			
 			if(currentDistance > ACCEPT_LIMIT_DISTANCE){
 				//Only if the new barcode is found far enough make it count
@@ -238,6 +237,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				lastBarcodePosition[0] = corner[0];
 				lastBarcodePosition[1] = corner[1];
 			}
+			
+			mTransitionHandler.sendEmptyMessage(R.id.start_timeout);
 			
 			/*ImageView wait = (ImageView) findViewById(R.id.waiting);
 			wait.setVisibility(View.VISIBLE);
