@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +21,10 @@ public class OverlayDrawer extends View {
 	
 	private Paint paint;
 	private Bitmap mBitmap;
+	private Handler mHandler;
 	
 	//rata de scalare (marire) a pozei afisate
-	private float scaleRatio = 0.4f;
+	private float scaleRatio = 1.0f;
 	//deplasarea in directia stanga sus a pozei
 	private float xOffset;
 	private float yOffset;
@@ -38,14 +40,23 @@ public class OverlayDrawer extends View {
 		paint.setStrokeWidth(8.0f);
 		
 		//de mutat in functia in care primeste poza de afisat
-		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fav);
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ed202);
+		
+		Matrix  matrix = new Matrix();
+		matrix.postScale(scaleRatio, scaleRatio);
+		
+		mBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+		
 		mBitmap.prepareToDraw();
 		mBmpHeight = mBitmap.getHeight();
 		mBmpWidth = mBitmap.getWidth();
 		
-		xOffset = -(float)((scaleRatio - 1) * mBmpWidth) / 2.0f;
-		yOffset = -(float)((scaleRatio - 1) * mBmpHeight) / 2.0f;
+		/*xOffset = -(float)((scaleRatio - 1) * mBmpWidth) / 2.0f;
+		yOffset = -(float)((scaleRatio - 1) * mBmpHeight) / 2.0f;*/
 		//---
+		
+		xOffset = 100;
+		yOffset = 100;
 		
 		mCurrent = null;
 	}
@@ -54,26 +65,8 @@ public class OverlayDrawer extends View {
 	public void onDraw(Canvas canvas) {
 		if(mCurrent != null){
 			
-			Matrix  mMatrix = new Matrix();
-			final float[] src = new float[]{
-					xOffset, yOffset,
-					xOffset, yOffset + mBitmap.getHeight() * scaleRatio,
-					xOffset + mBitmap.getWidth() * scaleRatio, yOffset};
-			/*final float[] dst = new float[]{
-					pts.get(2), pts.get(3), 
-					pts.get(0), pts.get(1),
-					pts.get(4), pts.get(5)};*/
-			
-			//voi primi toate coordonatele aici, pentru ca voi calcula pt fiecare punct in parte
-			final float[] dst = new float[]{
-					mCurrent.ul[0], mCurrent.ul[1], 
-					mCurrent.bl[0], mCurrent.bl[1],
-					mCurrent.ur[0], mCurrent.ur[1]};
-			
 			canvas.save();
-			mMatrix.setPolyToPoly(src, 0, dst, 0, src.length >> 1);
-            canvas.concat(mMatrix);
-			canvas.drawBitmap(mBitmap, 0, 0, paint);
+			canvas.drawBitmap(mBitmap, mCurrent.x - xOffset, mCurrent.y - yOffset, paint);
 			canvas.restore();
 			
 			//afiseaza punctul albastru in coltul stanga sus
@@ -82,6 +75,8 @@ public class OverlayDrawer extends View {
 			canvas.drawPoint(mCurrent.ul[0], mCurrent.ul[1], paint2);
 
 			Log.d(TAG, "ReDrawn!");*/
+		} else { // TIMEOUT
+			
 		}
 	}
 	

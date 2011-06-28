@@ -64,7 +64,7 @@ public final class CaptureActivityHandler extends Handler {
 			// continuous AF. It does seem to hunt a bit, but I'm not sure what else to do.
 			
 			if (state == State.PREVIEW) {
-				CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
+				CameraManager.get().requestAutoFocus(this);
 			}
 			break;
 		case R.id.restart_preview:
@@ -84,6 +84,9 @@ public final class CaptureActivityHandler extends Handler {
 			// We're decoding as fast as possible, so when one decode fails, start another.
 			state = State.PREVIEW;
 			CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+			break;
+		case R.id.timeout:
+			activity.hideExpandActionButton();
 			break;
 		}
 	}
@@ -108,8 +111,6 @@ public final class CaptureActivityHandler extends Handler {
 		if (state == State.SUCCESS) {
 			state = State.PREVIEW;
 			CameraManager.get().requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-			CameraManager.get().requestAutoFocus(this, R.id.auto_focus);
-			activity.hideExpandActionButton();
 		}
 	}
 

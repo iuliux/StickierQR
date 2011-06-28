@@ -56,8 +56,10 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private Result lastResult;
 	private String characterSet;
 	
+	private static final float ACCEPT_LIMIT_DISTANCE = 50;
 	private Handler mTransitionHandler;
 	private TransitionThread transition;
+	private float[] lastBarcodePosition;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		hasSurface = false;
 		handler = null;
 		transition = null;
+		lastBarcodePosition = new float[]{-100, -100};
 
 		surfaceView = (SurfaceView) findViewById(R.id.camera_view);
 		mOverlay = (OverlayDrawer) findViewById(R.id.drawer);
@@ -155,12 +158,12 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			}
 			
 			if (transition == null) {
-				transition = new TransitionThread(mOverlay);
+				transition = new TransitionThread(mOverlay, handler);
 				transition.start();
 				mTransitionHandler = transition.getHandler();
 			}
 			
-			//handler.sendEmptyMessage(R.id.auto_focus);
+			handler.sendEmptyMessage(R.id.auto_focus);
 			
 		} catch (IOException ioe) {
 			Log.w(TAG, ioe);
@@ -197,8 +200,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	//E apelata cand un tag e gasit
 	//Se ocupa cu afisarea rezultatelor gasite
 	private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
-		//ImageView barcodeImageView = (ImageView) findViewById(R.id.actionbar_bottom);
-		
 		if (barcode != null) {
 			
 			//dimensiunile imaginii initiale
@@ -207,14 +208,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			//dimensiunile imaginii rotite
 			final int h = pic_width;
 			final int w = pic_height;
-			
-			//creeaza matricea de rotire
-			/*Matrix mtx = new Matrix();
-			mtx.postRotate(90);
-			//roteste bitmapul
-			Bitmap rotated = Bitmap.createBitmap(barcode, 0, 0, pic_width, pic_height, mtx, true);*/
-			
-			//barcodeImageView.setImageBitmap(rotated);
 			
 			//rata de scalare necesara
 			final float ratio = (float)mOverlay.getHeight() / (float)h; 
@@ -225,15 +218,26 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			//si le transforma
 			//	(rotire 90 de grade)
 			//	(scalare cu ratio)
-			float[] transformedPoints = new float[6];
-			int j = 0;
-			for(int i = 0; i < 3; i++){
-				transformedPoints[j++] = ratio*(w-points[i].getY()); //X
-				transformedPoints[j++] = ratio * points[i].getX(); //Y
-			}
+			float[] corner = new float[2];
+			corner[0] = ratio*(w-points[1].getY()); //X
+			corner[1] = ratio * points[1].getX(); //Y
 			
-			mTransitionHandler.sendMessage(Message.obtain(
-					mTransitionHandler, R.id.new_objective, new PolyState(transformedPoints, "test")));
+			final float currentDistance = (float)
+				Math.sqrt((lastBarcodePosition[0] - corner[0]) *
+						(lastBarcodePosition[0] - corner[0]) +
+					(lastBarcodePosition[1] - corner[1]) * (lastBarcodePosition[1] - corner[1]));
+
+			Log.d(TAG, "currentDistance = "+currentDistance);
+			
+			if(currentDistance > ACCEPT_LIMIT_DISTANCE){
+				//Only if the new barcode is found far enough make it count
+				mTransitionHandler.sendMessage(Message.obtain(
+						mTransitionHandler, R.id.new_objective, 
+						new PolyState(corner, "test")));
+				
+				lastBarcodePosition[0] = corner[0];
+				lastBarcodePosition[1] = corner[1];
+			}
 			
 			/*ImageView wait = (ImageView) findViewById(R.id.waiting);
 			wait.setVisibility(View.VISIBLE);

@@ -188,7 +188,7 @@ public final class CameraManager {
    * @param handler The Handler to notify when the autofocus completes.
    * @param message The message to deliver.
    */
-  public void requestAutoFocus(Handler handler, int message) {
+  public void requestAutoFocus(Handler handler) {
     if (camera != null && previewing) {
       //Log.d(TAG, "Requesting auto-focus");
       camera.autoFocus(null);
