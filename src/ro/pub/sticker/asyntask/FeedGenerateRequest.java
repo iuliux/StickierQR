@@ -24,6 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
+import ro.pub.stickier.*;
 
 public class FeedGenerateRequest extends AsyncTask<String,String,Boolean> {
 
@@ -102,6 +103,10 @@ private Activity caller;
 	protected void onPostExecute(Boolean result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
+	    
+		((DisplayActivity)caller).getFeedStatus().setText(result.toString());
+		
+	    new CacheUpdaterTask(caller,"sticker").execute();
 		
 	}
 	

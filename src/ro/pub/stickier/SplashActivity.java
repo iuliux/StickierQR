@@ -13,7 +13,7 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		
-		new AuthTask("student","student",this).execute();
+		new AuthTask("student","student2",this).execute();
 	}
 	
 	@Override

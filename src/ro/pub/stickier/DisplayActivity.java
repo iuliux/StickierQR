@@ -1,6 +1,7 @@
 package ro.pub.stickier;
 
 import ro.pub.sticker.asyntask.CacheUpdaterTask;
+import ro.pub.sticker.asyntask.FeedGenerateRequest;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +14,10 @@ public class DisplayActivity extends Activity {
 	int fIndex;
 	int bIndex;
 	
-	Button next;
-	Button back;
-	TextView message;
-	TextView status;
+	public Button next;
+	public Button back;
+	public TextView message;
+	public TextView status;
 	
 	public TextView getFeedStatus() {
 		return status;
@@ -37,10 +38,13 @@ public class DisplayActivity extends Activity {
 	    message = (TextView)findViewById(R.id.message);
 	    status = (TextView)findViewById(R.id.feedStatus);
 	    
+	    if (!(Application.cache.getCacheId() != null && Application.cache.getCacheId().equals("stickier")))
+	    	new FeedGenerateRequest("sticker",this).execute();
+	    
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
 	    
-	    new CacheUpdaterTask(this,"sticker").execute();
+	    //new CacheUpdaterTask(this,"sticker").execute();
 	    
 	};
 	
@@ -86,6 +90,9 @@ public class DisplayActivity extends Activity {
 	class BackClick implements OnClickListener {
 			
 			public void onClick(View v) {
+				
+				if (Application.cache.size() == 0)
+					return;
 				
 				message.setText(Application.cache.get(bIndex));
 				if (bIndex >0 ){
