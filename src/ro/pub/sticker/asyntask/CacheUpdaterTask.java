@@ -24,6 +24,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import ro.pub.stickier.DisplayActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,7 +33,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
-
 
 public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 
@@ -156,6 +157,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 				
+		((DisplayActivity)caller).getFeedStatus().setText(result);
 		
 	}
 	

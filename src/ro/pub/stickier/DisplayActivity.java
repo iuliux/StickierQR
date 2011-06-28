@@ -46,44 +46,39 @@ public class DisplayActivity extends Activity {
 	
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		
+		super.onPause();	
 	}
 	
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		//fIndex = bIndex = 0;
 	}
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		
-		fIndex = bIndex = 0;
-		
+		super.onDestroy();	
+		fIndex = bIndex = 0;	
 	}
 	
 	class NextClick implements OnClickListener {
 		
 		public void onClick(View v) {
 			
-				if (fIndex ==  bIndex){
+			if (Application.cache.size() == 0)
+				return;
+			
+				if (fIndex == bIndex){
 					message.setText(Application.cache.get(fIndex));
 					if (fIndex < Application.cache.size() - 1)
 						fIndex++;
 					return;
 				}
-			
+					
 				message.setText(Application.cache.get(fIndex));
 				if (fIndex < Application.cache.size() - 1){
 					bIndex++;
 					fIndex++;
-				}
-			
+				}			
 		}
 		
 	}
@@ -98,8 +93,7 @@ public class DisplayActivity extends Activity {
 					fIndex--;
 				}
 				
-			}
-			
-		}
+			}		
+	}
 	
 }
