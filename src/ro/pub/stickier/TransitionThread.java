@@ -95,7 +95,7 @@ public class TransitionThread extends Thread {
 	@Override
 	public void run(){
 		final long beforeComputingTime = System.nanoTime();
-		Log.d(TAG, "Runned! "+ (System.currentTimeMillis() - startTime));
+		//Log.d(TAG, "Runned! "+ (System.currentTimeMillis() - startTime));
 		if(state == State.ANIMATING){
 			//Log.d(TAG, "Animated!");
 			if(System.currentTimeMillis() - startTime < TIMEOUT){
