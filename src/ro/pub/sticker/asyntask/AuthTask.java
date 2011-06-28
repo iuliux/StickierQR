@@ -1,15 +1,10 @@
 package ro.pub.sticker.asyntask;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -17,7 +12,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
-import ro.pub.sticker.*;
+import ro.pub.stickier.*;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -117,10 +112,14 @@ private Activity caller;
 	
 	@Override
 	protected void onPostExecute(String result) {
-		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 		
+		Toast.makeText(caller, result, Toast.LENGTH_SHORT).show();
 		
+		caller.startActivity(new Intent(caller, CaptureActivity.class));
+		
+		//Now finish the caller activity, so when the user wants to come back he won't see this again
+		caller.finish();
 	}
 	
 }
