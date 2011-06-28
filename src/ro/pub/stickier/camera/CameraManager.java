@@ -55,7 +55,6 @@ public final class CameraManager {
     SDK_INT = sdkInt;
   }
 
-  private final Context context;
   private final CameraConfigurationManager configManager;
   private Camera camera;
   private Rect framingRect;
@@ -90,8 +89,6 @@ public final class CameraManager {
   }
 
   private CameraManager(Context context) {
-
-    this.context = context;
     this.configManager = new CameraConfigurationManager(context);
 
     // Camera.setOneShotPreviewCallback() has a race condition in Cupcake, so we use the older
