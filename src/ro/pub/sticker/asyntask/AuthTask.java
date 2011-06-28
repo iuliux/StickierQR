@@ -14,18 +14,15 @@ import org.apache.http.message.BasicNameValuePair;
 
 import ro.pub.stickier.*;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
 
-public class AuthTask extends AsyncTask<String,String,String> {
+public class AuthTask extends AsyncTask<String,String,Integer> {
 
 	
-private Activity caller;
+private AuthTaskCallback callback;
 	
 	/*
 	 * An authentification request is identified by the username, password pair 
@@ -37,10 +34,10 @@ private Activity caller;
 	/*
 	 * Constructor
 	 */
-	public AuthTask(String _username, String _password, Activity _caller){
+	public AuthTask(String _username, String _password, AuthTaskCallback _callback){
 		username = _username;
 		password = _password;
-		caller = _caller;
+		callback = _callback;
 	}
 	
 	/*
@@ -64,9 +61,16 @@ private Activity caller;
 	 * Does a POST request which should result in a new session with
 	 * the parameters properly assigned 
 	 * 
+	 * Response codes:
+	 * 		Error:
+	 * 			1 - client error
+	 * 			2 - client protocol error
+	 * 			3 - communication error
+	 * 		Success:
+	 * 			5 - authentificated
 	 */
 	@Override
-	protected String doInBackground(String... params) {
+	protected Integer doInBackground(String... params) {
 		
 		/*
 		 * No need to issue a new request
@@ -87,7 +91,7 @@ private Activity caller;
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 		} catch (UnsupportedEncodingException e) {
 			Log.e("URL", "URL Encoded Exception");
-			return "Client error";
+			return 1; //client error
 		}
 		
 		/*
@@ -101,25 +105,22 @@ private Activity caller;
 			
 		} catch (ClientProtocolException e) {
 			Log.e("RESPONSE", "Protocol Problem");
-			return "Client protocol error";
+			return 2; //client protocol error
 		} catch (IOException e) {
 			Log.e("RESPONSE", "IO Exception");
-			return "Communication error";
+			return 3; //Communication error
 		}
 		
-		return "Authentificated with username "+ authUsername;
+		return 5; //Authentificated
 	}
 	
 	@Override
-	protected void onPostExecute(String result) {
+	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
 		
-		Toast.makeText(caller, result, Toast.LENGTH_SHORT).show();
+		final boolean ok = (result >= 5); //outside the error codes area
 		
-		caller.startActivity(new Intent(caller, CaptureActivity.class));
-		
-		//Now finish the caller activity, so when the user wants to come back he won't see this again
-		caller.finish();
+		callback.authCallback(ok, result);
 	}
 	
 }

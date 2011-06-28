@@ -120,7 +120,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 			
 			Log.d("STATUS LINE", ((Integer)line.getStatusCode()).toString());
 			
-			if (line.getStatusCode() % 100 == 4)
+			if (line.getStatusCode() % 100 >= 4)
 				break feedLoop;
 			
 			entity = response.getEntity();
