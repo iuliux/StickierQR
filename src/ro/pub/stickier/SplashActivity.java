@@ -1,5 +1,6 @@
 package ro.pub.stickier;
 
+import ro.pub.sticker.asyntask.AuthTask;
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		
+		new AuthTask("student","student",this).execute();
 	}
 	
 	@Override
