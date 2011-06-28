@@ -23,8 +23,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * The main settings activity.

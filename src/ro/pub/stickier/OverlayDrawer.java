@@ -1,9 +1,5 @@
 package ro.pub.stickier;
 
-import java.util.ArrayList;
-
-import com.google.zxing.common.Collections;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
