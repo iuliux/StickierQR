@@ -1,63 +1,105 @@
 package ro.pub.stickier;
 
+import ro.pub.sticker.asyntask.CacheUpdaterTask;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Transformation;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class DisplayActivity extends Activity implements OnClickListener {
+public class DisplayActivity extends Activity {
+	
+	int fIndex;
+	int bIndex;
+	
+	Button next;
+	Button back;
+	TextView message;
+	TextView status;
+	
+	public TextView getFeedStatus() {
+		return status;
+	}
 
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.display);
-        findViewById(R.id.collapse).setOnClickListener(this);
-    }
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+	    setContentView(R.layout.display);
+	    
+	    fIndex = 0;
+	    bIndex = 0;
+	    
+	    next = (Button) findViewById(R.id.next);
+	    back = (Button) findViewById(R.id.back);
+	    
+	    message = (TextView)findViewById(R.id.message);
+	    status = (TextView)findViewById(R.id.feedStatus);
+	    
+	    next.setOnClickListener(new NextClick());
+	    back.setOnClickListener(new BackClick());
+	    
+	    new CacheUpdaterTask(this,"sticker").execute();
+	    
+	};
 	
 	@Override
-    public void onClick(View view) {
-        view.startAnimation(new MyScaler(1.0f, 1.0f, 1.0f, 0.2f, 500, view, true));
-    }
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+	}
 	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		//fIndex = bIndex = 0;
+	}
 	
-	public class MyScaler extends ScaleAnimation {
-
-        private View mView;
-
-        private LayoutParams mLayoutParams;
-
-        private int mMarginBottomFromY, mMarginBottomToY;
-
-        private boolean mVanishAfter = false;
-
-        public MyScaler(float fromX, float toX, float fromY, float toY, int duration, View view,
-                boolean vanishAfter) {
-            super(fromX, toX, fromY, toY);
-            setDuration(duration);
-            mView = view;
-            mVanishAfter = vanishAfter;
-            mLayoutParams = (LayoutParams) view.getLayoutParams();
-            int height = mView.getHeight();
-            mMarginBottomFromY = (int) (height * fromY) + mLayoutParams.bottomMargin - height;
-            mMarginBottomToY = (int) (0 - ((height * toY) + mLayoutParams.bottomMargin)) - height;
-        }
-
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            super.applyTransformation(interpolatedTime, t);
-            if (interpolatedTime < 1.0f) {
-                int newMarginBottom = mMarginBottomFromY
-                        + (int) ((mMarginBottomToY - mMarginBottomFromY) * interpolatedTime);
-                mLayoutParams.setMargins(mLayoutParams.leftMargin, mLayoutParams.topMargin,
-                    mLayoutParams.rightMargin, newMarginBottom);
-                mView.getParent().requestLayout();
-            } else if (mVanishAfter) {
-                mView.setVisibility(View.GONE);
-            }
-        }
-
-    }
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		fIndex = bIndex = 0;
+		
+	}
+	
+	class NextClick implements OnClickListener {
+		
+		public void onClick(View v) {
+			
+				if (fIndex ==  bIndex){
+					message.setText(Application.cache.get(fIndex));
+					if (fIndex < Application.cache.size() - 1)
+						fIndex++;
+					return;
+				}
+			
+				message.setText(Application.cache.get(fIndex));
+				if (fIndex < Application.cache.size() - 1){
+					bIndex++;
+					fIndex++;
+				}
+			
+		}
+		
+	}
+	
+	class BackClick implements OnClickListener {
+			
+			public void onClick(View v) {
+				
+				message.setText(Application.cache.get(bIndex));
+				if (bIndex >0 ){
+					bIndex--;
+					fIndex--;
+				}
+				
+			}
+			
+		}
+	
 }

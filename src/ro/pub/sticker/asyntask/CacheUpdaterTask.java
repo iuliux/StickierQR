@@ -85,9 +85,9 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		/*
 		 * No need to issue a new request, the cache contains the feed
 		 */
-		if (cache.getCacheId() != null && cache.getCacheId().equals(stickerId)) return "Already in cache";
+		if (cached) return "Already in cache";
 		
-		Log.d("REQUEST", "New request for feed");
+		Log.d("FEED D START", "Starting to download the feed");
 		
 		/*
 		 * We reset the cache and set the new cacheId
@@ -95,16 +95,11 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		cache.reset();
 		cache.setCacheId(stickerId);
 		
-		Log.d("FEED", cache.getCacheId());
+		Log.d("FEED ID", cache.getCacheId());
 		
 		HttpResponse response;
 		HttpEntity entity;
 		String content;
-		Header status, hasNext;
-		
-		/*
-		 *  !!! IMPORTANT FEED RESET CODE GOES HERE
-		 */
 		
 		/*
 		 * We issue a request for each feed item and then
@@ -127,28 +122,11 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 			if (line.getStatusCode() % 100 == 4)
 				break feedLoop;
 			
-			//status = response.getFirstHeader("success");
-			
-			//Log.d("SUCCESS", status.getValue());
-			
-			//if (status.getValue().equals("no"))
-				//return "Error occured on the server";
-			
 			entity = response.getEntity();
 			
 			content = IOUtils.toString(entity.getContent());
 			
 			publishProgress(content);
-			
-			//hasNext = response.getFirstHeader("hasnext");
-			
-			//Log.d("HAS NEXT", hasNext.getValue());
-			
-			//if (hasNext.getValue().equalsIgnoreCase("false"))
-				//break feedLoop;
-			
-			//if (content.equals("The end"))
-				//break feedLoop;
 			
 		} catch (ClientProtocolException e) {
 			Log.e("RESPONSE ERROR", "Protocol Problem");
@@ -165,8 +143,6 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 	@Override
 	protected void onProgressUpdate(String... values) {
 		super.onProgressUpdate(values);
-		
-		//Toast.makeText(caller, values[0], Toast.LENGTH_SHORT).show();
 		
 		/*
 		 * Add the new item to the cache
