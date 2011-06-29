@@ -1,6 +1,7 @@
 package ro.pub.stickier.asyntask;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -22,6 +23,8 @@ import ro.pub.stickier.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -29,7 +32,7 @@ import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
 
-public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
+public class StickerGetterTask extends AsyncTask<String,Integer,Bitmap> {
 	
 	private Activity caller;
 	
@@ -44,14 +47,19 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 	/*
 	 * The resource should be cached using a file
 	 */
-	//File f; 
+	//File f
+	
+	StickerGetterCallback callback;
+	
+	Bitmap stickerImage = null;
 	
 	/*
 	 * Constructor
 	 */
-	public StickerGetterTask(String _stickerId, Activity _caller){
+	public StickerGetterTask(String _stickerId, Activity _caller,StickerGetterCallback _callback){
 		stickerId = _stickerId;
 		caller = _caller;
+		callback = _callback;
 		//cached = false; //In case you are unaware of the obvious
 	}
 	
@@ -77,8 +85,10 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 		/*
 		 * Check weather the demanded resource is already in cache
 		 */
-		if (new File(caller.getFilesDir(),stickerId + ".jpg").exists()) {
+		File f;
+		if ((f = new File(caller.getFilesDir(),stickerId + ".jpg")).exists()) {
 			cached = true;
+			stickerImage = BitmapFactory.decodeStream(new FileInputStream(f));
 		}
 		
 	}
@@ -90,12 +100,14 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 	 * 
 	 */
 	@Override
-	protected Boolean doInBackground(String... params) {
+	protected Bitmap doInBackground(String... params) {
 		
 		/*
 		 * No need to issue a new request
 		 */
-		if (cached) return true;
+		if (cached) {
+			return stickerImage;
+		}
 		
 		Log.d("REQUEST", "New request for sticker");
 		
@@ -110,7 +122,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 		} catch (UnsupportedEncodingException e) {
 			Log.e("URL", "URL Encoded Exception");
-			return false;
+			return null;
 		}
 		
 		/*
@@ -124,7 +136,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 			
 			
 			if (line.getStatusCode() % 100 == 4)
-				return false;
+				return null;
 			
 			HttpEntity entity = response.getEntity();
 			
@@ -132,24 +144,30 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 			
 			entity.writeTo(output);
 			
+			output.flush();
 			output.close();
 			
+			stickerImage = BitmapFactory.decodeStream(new FileInputStream(
+					new File(caller.getFilesDir(),stickerId + ".jpg")));
+					
 		} catch (ClientProtocolException e) {
 			Log.e("RESPONSE", "Protocol Problem");
-			return false;
+			return null;
 		} catch (IOException e) {
 			Log.e("RESPONSE", "IO Exception");
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 		
-		return true;
+		return stickerImage;
 	}
 	
 	@Override
-	protected void onPostExecute(Boolean result) {
+	protected void onPostExecute(Bitmap result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
+		
+		callback.getterCallback(result);
 		
 	}
 	
