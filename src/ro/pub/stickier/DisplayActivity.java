@@ -28,8 +28,8 @@ public class DisplayActivity extends Activity {
 	    back.setEnabled(false);
 	    message.setText(Application.cache.get(0));
 	    
-	    after.setVisibility(View.GONE);
-	    before.setVisibility(View.VISIBLE);
+	    before.setVisibility(View.GONE);
+	    after.setVisibility(View.VISIBLE);
 	    if (Application.cache.size() < 2)
 	    	next.setEnabled(false);
 	    
@@ -40,18 +40,8 @@ public class DisplayActivity extends Activity {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.display);
 		
-		if (!(Application.cache.getCacheId() != null && Application.cache.getCacheId().equals("stickier")))
-	    	new FeedGenerateRequest("sticker",this).execute();
-		else {
-			if (Application.cache.size()>0){
-				startActivity(new Intent(this,DisplayActivity.class));
-			} else {
-				status.setText("Empty feed");
-			}
-		}
-	    
+	    after = (View)findViewById(R.id.after);
 		before = (View)findViewById(R.id.before);
-		before.setVisibility(View.GONE);
 		
 	    next = (Button) findViewById(R.id.next);
 	    back = (Button) findViewById(R.id.back);
@@ -61,7 +51,21 @@ public class DisplayActivity extends Activity {
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
 	    
-	    //new CacheUpdaterTask(this,"sticker").execute();
+	    Application.cache.reset();
+	    
+		if (!(Application.cache.getCacheId() != null && Application.cache.getCacheId().equals("stickier")))
+	    	new FeedGenerateRequest("sticker",this).execute();
+		else {
+			if (Application.cache.size()>0){
+				status.setText("Already in cache");
+				initView();
+				return;
+			} else {
+				status.setText("Empty feed");
+			}
+		}
+	    
+		after.setVisibility(View.GONE);
 	    
 	};
 	
