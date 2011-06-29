@@ -29,6 +29,10 @@
     	<activity android:name=".DisplayActivity"
         	      android:label="@string/display_name">
     	</activity>
+    	
+    	<activity android:name=".WaitingActivity"
+        	      android:label="@string/waiting_name">
+    	</activity>
 
     </application>
     <uses-sdk android:minSdkVersion="8" />

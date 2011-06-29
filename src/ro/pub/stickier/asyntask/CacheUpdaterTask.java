@@ -35,6 +35,8 @@ import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
 
+import ro.pub.stickier.*;
+
 public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 
 	private Activity caller;
@@ -151,6 +153,12 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		 */
 		cache.add(values[0]);
 		
+		if (cache.size() == 1){
+			Intent startDisplayActivity = new Intent(caller,DisplayActivity.class);
+			caller.startActivity(startDisplayActivity);
+			caller.finish();
+		}
+		
 		
 	}
 	
@@ -158,7 +166,9 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 				
-		((DisplayActivity)caller).getFeedStatus().setText(result);
+		if (cache != null && cache.size() == 0){
+			((WaitingActivity)caller).getStatus().setText("Empty feed");
+		}
 		
 	}
 	

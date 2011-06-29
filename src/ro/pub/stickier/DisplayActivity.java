@@ -17,28 +17,22 @@ public class DisplayActivity extends Activity {
 	public Button next;
 	public Button back;
 	public TextView message;
-	public TextView status;
 	
-	public TextView getFeedStatus() {
-		return status;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.display);
 	    
-	    fIndex = 0;
+	    fIndex = 1;
 	    bIndex = 0;
 	    
 	    next = (Button) findViewById(R.id.next);
 	    back = (Button) findViewById(R.id.back);
 	    
 	    message = (TextView)findViewById(R.id.message);
-	    status = (TextView)findViewById(R.id.feedStatus);
 	    
-	    if (!(Application.cache.getCacheId() != null && Application.cache.getCacheId().equals("stickier")))
-	    	new FeedGenerateRequest("sticker",this).execute();
+	    message.setText(Application.cache.get(0));
 	    
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
@@ -60,27 +54,16 @@ public class DisplayActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();	
-		fIndex = bIndex = 0;	
+		super.onDestroy();		
 	}
 	
 	class NextClick implements OnClickListener {
 		
 		public void onClick(View v) {
-
-			if (Application.cache.size() == 0)
-				return;
 			
 			back.setEnabled(true);
 			if(fIndex == Application.cache.size() - 1)
 				next.setEnabled(false);
-
-			if (fIndex == bIndex){
-				message.setText(Application.cache.get(fIndex));
-				if (fIndex < Application.cache.size() - 1)
-					fIndex++;
-				return;
-			}
 
 			message.setText(Application.cache.get(fIndex));
 			if (fIndex < Application.cache.size() - 1){
@@ -94,9 +77,6 @@ public class DisplayActivity extends Activity {
 	class BackClick implements OnClickListener {
 			
 			public void onClick(View v) {
-				
-				if (Application.cache.size() == 0)
-					return;
 				
 				message.setText(Application.cache.get(bIndex));
 				if (bIndex >0 ){

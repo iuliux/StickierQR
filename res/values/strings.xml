@@ -31,4 +31,5 @@
 	<string name="auth_url">https://and2sticker.appspot.com//newSession</string>
 	<string name="feeder_url">https://and2sticker.appspot.com//feeder</string>
 	<string name="feed_generator_url">https://and2sticker.appspot.com//feedGenerator</string>
+	<string name="waiting_name">Waiting for feed</string>
 </resources>

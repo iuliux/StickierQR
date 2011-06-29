@@ -104,9 +104,11 @@ private Activity caller;
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 	    
-		((DisplayActivity)caller).getFeedStatus().setText(result.toString());
-		
-	    new CacheUpdaterTask(caller,"sticker").execute();
+		//((DisplayActivity)caller).getFeedStatus().setText(result.toString());
+		if (result)		
+	    	new CacheUpdaterTask(caller,"sticker").execute();
+		else 
+			((WaitingActivity)caller).getStatus().setText("Failed to issue request");
 		
 	}
 	
