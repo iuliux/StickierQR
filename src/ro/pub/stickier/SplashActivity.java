@@ -1,7 +1,7 @@
 package ro.pub.stickier;
 
-import ro.pub.sticker.asyntask.AuthTask;
-import ro.pub.sticker.asyntask.AuthTaskCallback;
+import ro.pub.stickier.asyntask.AuthTask;
+import ro.pub.stickier.asyntask.AuthTaskCallback;
 
 import android.app.Activity;
 import android.os.Bundle;
