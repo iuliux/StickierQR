@@ -1,10 +1,15 @@
-package ro.pub.sticker.asyntask;
+package ro.pub.stickier.asyntask;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -12,86 +17,61 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
-import ro.pub.stickier.*;
-
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
+import ro.pub.stickier.*;
 
-public class AuthTask extends AsyncTask<String,String,Integer> {
+public class FeedGenerateRequest extends AsyncTask<String,String,Boolean> {
 
 	
-private AuthTaskCallback callback;
+private Activity caller;
 	
 	/*
 	 * An authentification request is identified by the username, password pair 
 	 */
-	private String username, password; 
-	
-	boolean authentificated;
+	private String stickerId; 
 	
 	/*
 	 * Constructor
 	 */
-	public AuthTask(String _username, String _password, AuthTaskCallback _callback){
-		username = _username;
-		password = _password;
-		callback = _callback;
+	public FeedGenerateRequest(String _stickerId, Activity _caller){
+		stickerId = _stickerId;
+		caller = _caller;
 	}
-	
-	/*
-	 * Set the authentificated flag properly
-	 * 
-	 * (non-Javadoc)
-	 * @see android.os.AsyncTask#onPreExecute()
-	 */
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		
-		if (authUsername != null)
-			authentificated = true;
-		
-	}
-	
 	
 	/*
 	 * 
 	 * Does a POST request which should result in a new session with
 	 * the parameters properly assigned 
 	 * 
-	 * Response codes:
-	 * 		Error:
-	 * 			1 - client error
-	 * 			2 - client protocol error
-	 * 			3 - communication error
-	 * 		Success:
-	 * 			5 - authentificated
 	 */
 	@Override
-	protected Integer doInBackground(String... params) {
+	protected Boolean doInBackground(String... params) {
 		
 		/*
 		 * No need to issue a new request
 		 */
 		//if (cached) return "Already in cache";
 		
-		Log.d("SESSION REQUEST", "New session request");
+		Log.d("FEED REQUEST", "New feed request");
 		
-		HttpPost post = new HttpPost("https://and2sticker.appspot.com//newSession");
+		HttpPost post = new HttpPost(caller.getString(R.string.feed_generator_url));
 		
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		/*
 		 * Set the parameters of the request
 		 */
-		pairs.add(new BasicNameValuePair("username", username));
-		pairs.add(new BasicNameValuePair("password", password));
+		pairs.add(new BasicNameValuePair("stickerid", stickerId));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 		} catch (UnsupportedEncodingException e) {
 			Log.e("URL", "URL Encoded Exception");
-			return 1; //client error
+			return false;
 		}
 		
 		/*
@@ -101,26 +81,33 @@ private AuthTaskCallback callback;
 			
 			HttpResponse response = client.execute(post);
 			
-			authUsername = response.getFirstHeader("username").getValue();
+			String status = response.getFirstHeader("status").getValue();
+			
+			Log.d("HEADER", status);
+			
+			if (! status.equals("ok"))
+				return false;
 			
 		} catch (ClientProtocolException e) {
 			Log.e("RESPONSE", "Protocol Problem");
-			return 2; //client protocol error
+			return false;
 		} catch (IOException e) {
 			Log.e("RESPONSE", "IO Exception");
-			return 3; //Communication error
+			return false;
 		}
 		
-		return 5; //Authentificated
+		return true;
 	}
 	
 	@Override
-	protected void onPostExecute(Integer result) {
+	protected void onPostExecute(Boolean result) {
+		// TODO Auto-generated method stub
 		super.onPostExecute(result);
+	    
+		((DisplayActivity)caller).getFeedStatus().setText(result.toString());
 		
-		final boolean ok = (result >= 5); //outside the error codes area
+	    new CacheUpdaterTask(caller,"sticker").execute();
 		
-		callback.authCallback(ok, result);
 	}
 	
 }

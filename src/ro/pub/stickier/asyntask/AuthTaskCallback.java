@@ -1,4 +1,4 @@
-package ro.pub.sticker.asyntask;
+package ro.pub.stickier.asyntask;
 
 public interface AuthTaskCallback {
 	 /**

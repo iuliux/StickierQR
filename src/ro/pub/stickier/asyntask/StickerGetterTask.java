@@ -1,4 +1,4 @@
-package ro.pub.sticker.asyntask;
+package ro.pub.stickier.asyntask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import ro.pub.stickier.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -105,7 +106,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 		
 		Log.d("REQUEST", "New request for sticker");
 		
-		HttpPost post = new HttpPost("https://and2sticker.appspot.com//stickerImageFeeder");
+		HttpPost post = new HttpPost(caller.getString(R.string.sticker_image_feeder_url));
 		
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		/*

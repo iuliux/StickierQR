@@ -1,7 +1,7 @@
 package ro.pub.stickier;
 
-import ro.pub.sticker.asyntask.CacheUpdaterTask;
-import ro.pub.sticker.asyntask.FeedGenerateRequest;
+import ro.pub.stickier.asyntask.CacheUpdaterTask;
+import ro.pub.stickier.asyntask.FeedGenerateRequest;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

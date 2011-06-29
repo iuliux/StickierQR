@@ -1,4 +1,4 @@
-package ro.pub.sticker.asyntask;
+package ro.pub.stickier.asyntask;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import ro.pub.stickier.DisplayActivity;
+import ro.pub.stickier.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -110,7 +111,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		
 		Log.d("FEED ITEM REQUEST", "-!-");	
 		
-		HttpPost post = new HttpPost("https://and2sticker.appspot.com//feeder");
+		HttpPost post = new HttpPost(caller.getString(R.string.feeder_url));
 		
 		try {
 			
