@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-					android:layout_width="match_parent" android:layout_height="match_parent"
-					android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:background="@drawable/splash_background" >
 
-	<TextView
-	    android:text="@string/lorem_ipsum"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" />
-	
-	<TextView
-	    android:text="@string/preferences_login_pass"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content" />
-
-</LinearLayout>
+	<FrameLayout	android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal|center_vertical"> 
+		
+		<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:gravity="center" >
+					
+			<ImageView	android:layout_width="wrap_content"
+			    		android:layout_height="wrap_content"
+			    		android:src="@drawable/icon_large" />
+			
+			<TextView	android:id="@+id/textbox"
+						android:text="@string/splash_authenticating"
+			    		android:layout_width="wrap_content"
+			    		android:layout_height="wrap_content"
+			    		android:padding="20dip"
+			    		android:layout_margin="30dip"
+			    		android:background="@drawable/splash_box" />
+			    		
+    		<Button		android:id="@+id/retry"
+    					android:layout_width="wrap_content"
+    					android:layout_height="wrap_content"
+    					android:text="@string/splash_retry"
+    					android:padding="15dip"
+    					android:visibility="invisible" />
+		</LinearLayout>		    
+	</FrameLayout>
+</FrameLayout>

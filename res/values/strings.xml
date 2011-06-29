@@ -16,6 +16,15 @@
 	<string name="preferences_login_pass">Password:</string>
 	<string name="preferences_login_summary">If you have a user name, you will receive information specific to your role.</string>
 	
+	<string name="splash_authenticating">Please wait while authenticating as </string>
+	<string name="splash_authenticated">[Success] Authenticated as </string>
+	<string name="splash_client_error">[Client Error]</string>
+	<string name="splash_client_protocol_error">[Client Protocol Error]</string>
+	<string name="splash_communication_error">[Communication Error]</string>
+	<string name="splash_error">Check your Internet connection and press Rety!</string>
+	<string name="splash_retry">Retry</string>
+	<string name="splash_retrying">Retrying to authenticate... please wait</string>
+	
 	<string name="display_name">Information</string>
 	<string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales euismod leo, molestie sollicitudin odio tristique vel. Etiam tincidunt venenatis dolor, quis vehicula leo aliquam vel. In vestibulum aliquam sollicitudin. Praesent tincidunt ultricies imperdiet. Suspendisse dignissim, mi accumsan tincidunt iaculis, turpis nisl venenatis leo, nec cursus leo diam at dui. Vivamus in mauris eu neque egestas consequat non eu tellus.</string>
 	<string name="sticker_image_feeder_url">https://and2sticker.appspot.com//stickerImageFeeder</string>

@@ -51,9 +51,6 @@ public class AuthTask extends AsyncTask<String,String,Integer> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		
-		if (authUsername != null)
-			authentificated = true;
-		
 	}
 	
 	
@@ -73,12 +70,7 @@ public class AuthTask extends AsyncTask<String,String,Integer> {
 	@Override
 	protected Integer doInBackground(String... params) {
 		
-		/*
-		 * No need to issue a new request
-		 */
-		if (authentificated) return 5;
-		
-		Log.d("SESSION REQUEST", "New session request");
+		//Log.d("SESSION REQUEST", "New session request");
 		
 		HttpPost post = new HttpPost(((Activity)callback).getString(R.string.auth_url));
 		
@@ -91,7 +83,7 @@ public class AuthTask extends AsyncTask<String,String,Integer> {
 		try {
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 		} catch (UnsupportedEncodingException e) {
-			Log.e("URL", "URL Encoded Exception");
+			//Log.e("URL", "URL Encoded Exception");
 			return 1; //client error
 		}
 		
@@ -105,10 +97,10 @@ public class AuthTask extends AsyncTask<String,String,Integer> {
 			authUsername = response.getFirstHeader("username").getValue();
 			
 		} catch (ClientProtocolException e) {
-			Log.e("RESPONSE", "Protocol Problem");
+			//Log.e("RESPONSE", "Protocol Problem");
 			return 2; //client protocol error
 		} catch (IOException e) {
-			Log.e("RESPONSE", "IO Exception");
+			//Log.e("RESPONSE", "IO Exception");
 			return 3; //Communication error
 		}
 		
