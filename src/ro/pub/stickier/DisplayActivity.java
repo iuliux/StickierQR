@@ -25,7 +25,6 @@ public class DisplayActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.display);
 	    
@@ -43,6 +42,7 @@ public class DisplayActivity extends Activity {
 	    
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
+	    back.setEnabled(false);
 	    
 	    //new CacheUpdaterTask(this,"sticker").execute();
 	    
@@ -67,24 +67,28 @@ public class DisplayActivity extends Activity {
 	class NextClick implements OnClickListener {
 		
 		public void onClick(View v) {
-			
+
 			if (Application.cache.size() == 0)
 				return;
 			
-				if (fIndex == bIndex){
-					message.setText(Application.cache.get(fIndex));
-					if (fIndex < Application.cache.size() - 1)
-						fIndex++;
-					return;
-				}
-					
+			back.setEnabled(true);
+			if(fIndex == Application.cache.size() - 1)
+				next.setEnabled(false);
+
+			if (fIndex == bIndex){
 				message.setText(Application.cache.get(fIndex));
-				if (fIndex < Application.cache.size() - 1){
-					bIndex++;
+				if (fIndex < Application.cache.size() - 1)
 					fIndex++;
-				}			
+				return;
+			}
+
+			message.setText(Application.cache.get(fIndex));
+			if (fIndex < Application.cache.size() - 1){
+				bIndex++;
+				fIndex++;
+			}
 		}
-		
+
 	}
 	
 	class BackClick implements OnClickListener {
@@ -99,6 +103,10 @@ public class DisplayActivity extends Activity {
 					bIndex--;
 					fIndex--;
 				}
+				
+				next.setEnabled(true);
+				if(bIndex == 0)
+					back.setEnabled(false);
 				
 			}		
 	}

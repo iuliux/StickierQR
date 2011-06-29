@@ -88,6 +88,12 @@ public final class CaptureActivityHandler extends Handler {
 		case R.id.timeout:
 			activity.hideExpandActionButton();
 			break;
+		case R.id.show_waiting:
+			activity.showWaiting();
+			break;
+		case R.id.hide_waiting:
+			activity.hideWaiting();
+			break;
 		}
 	}
 

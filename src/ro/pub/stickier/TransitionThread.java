@@ -1,5 +1,6 @@
 package ro.pub.stickier;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class TransitionThread extends Thread {
 
 	private PolyState mCurrent;
 	private PolyState mDest;
+	private Bitmap mBitmap;
 	
 	private float vX;
 	private float vY;
@@ -34,6 +36,8 @@ public class TransitionThread extends Thread {
 	public TransitionThread(OverlayDrawer drawer, Handler activityHandler){
 		state = State.NOTHING;
 		startTime = 0;
+		mCurrent = null;
+		mBitmap = null;
 
 		mHandler = new Handler(){
 			@Override
@@ -105,9 +109,9 @@ public class TransitionThread extends Thread {
 			//Log.d(TAG, "Animated!");
 			if(System.currentTimeMillis() - startTime < TIMEOUT){
 				if(vX != 0 || vY!=0) compute();
-				mGraphics.recieve(mCurrent);
+				mGraphics.recieve(mCurrent, mBitmap);
 			}else{
-				mGraphics.recieve(null);
+				mGraphics.recieve(null, null);
 				state = State.NOTHING;
 				mActivityHandler.sendEmptyMessage(R.id.timeout);
 			}

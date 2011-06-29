@@ -50,6 +50,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private ImageView settingsActionButton;
 	private ImageView expandActionButton;
 	private ImageView expandDelimiter;
+	private ImageView mWaitView;
 	private boolean hasSurface;
 	private Vector<BarcodeFormat> decodeFormats;
 	//private HistoryManager historyManager;
@@ -80,6 +81,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		settingsActionButton = (ImageView) findViewById(R.id.settings_action_button);
 		expandActionButton = (ImageView) findViewById(R.id.expand_action_button);
 		expandDelimiter = (ImageView) findViewById(R.id.expand_delimiter);
+		mWaitView = (ImageView) findViewById(R.id.waiting);
+		mWaitView.setDrawingCacheEnabled(true);
 		
 		mOverlay.setDrawingCacheEnabled(true);
 		
@@ -239,13 +242,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			}
 			
 			mTransitionHandler.sendEmptyMessage(R.id.start_timeout);
-			
-			/*ImageView wait = (ImageView) findViewById(R.id.waiting);
-			wait.setVisibility(View.VISIBLE);
-			wait.setDrawingCacheEnabled(true);
-			Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
-			wait.startAnimation(animation);*/
-			
 			showExpandActionButton();
 		}
 	}
@@ -266,6 +262,16 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		return mOverlay;
 	}
 	
+	public void showWaiting(){
+		mWaitView.setVisibility(View.VISIBLE);
+		Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
+		mWaitView.startAnimation(animation);
+	}
+	
+	public void hideWaiting(){
+		mWaitView.clearAnimation();
+		mWaitView.setVisibility(View.GONE);
+	}
 	
 	private void displayFrameworkBugMessageAndExit(String info) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -22,7 +22,7 @@ public class OverlayDrawer extends View {
 	//rata de scalare (marire) a pozei afisate
 	private float scaleRatio = 1.0f;
 	//deplasarea in directia stanga sus a pozei
-	private float xOffset;
+	private float mOffset;
 	private float yOffset;
 	private int mBmpHeight;
 	private int mBmpWidth;
@@ -47,12 +47,7 @@ public class OverlayDrawer extends View {
 		mBmpHeight = mBitmap.getHeight();
 		mBmpWidth = mBitmap.getWidth();
 		
-		/*xOffset = -(float)((scaleRatio - 1) * mBmpWidth) / 2.0f;
-		yOffset = -(float)((scaleRatio - 1) * mBmpHeight) / 2.0f;*/
-		//---
-		
-		xOffset = 100;
-		yOffset = 100;
+		mOffset = 100;
 		
 		mCurrent = null;
 	}
@@ -62,22 +57,19 @@ public class OverlayDrawer extends View {
 		if(mCurrent != null){
 			
 			canvas.save();
-			canvas.drawBitmap(mBitmap, mCurrent.x - xOffset, mCurrent.y - yOffset, paint);
+			canvas.drawBitmap(mBitmap, mCurrent.x - mOffset, mCurrent.y - yOffset, paint);
 			canvas.restore();
 			
-			//afiseaza punctul albastru in coltul stanga sus
-			/*Paint paint2 = new Paint(paint);
-			paint2.setARGB(255, 10, 0, 200);
-			canvas.drawPoint(mCurrent.ul[0], mCurrent.ul[1], paint2);
-
-			Log.d(TAG, "ReDrawn!");*/
+			//Log.d(TAG, "ReDrawn!");
 		} else { // TIMEOUT
 			
 		}
 	}
 	
-	public void recieve(PolyState poly){
-		mCurrent = poly;
+	public void recieve(PolyState newState, Bitmap bmp){
+		if(mCurrent == null || !mCurrent.sticker.equals(newState.sticker))
+			mBitmap = bmp;
+		mCurrent = newState;
 		//Log.d(TAG, "Recieved!");
 	}
 }

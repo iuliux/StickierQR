@@ -26,6 +26,8 @@
   <item type="id" name="return_scan_result"/>
   
   <item type="id" name="timeout"/>
+  <item type="id" name="show_waiting"/>
+  <item type="id" name="hide_waiting"/>
   
   <item type="id" name="new_objective"/>
   <item type="id" name="start_timeout"/>
