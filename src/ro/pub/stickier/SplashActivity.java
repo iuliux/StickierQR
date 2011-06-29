@@ -7,7 +7,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
@@ -20,12 +23,15 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
 	
 	private Activity mMe;
 	
+	private ImageView mIcon;
 	private Button mRetry;
 	private TextView mTextbox;
 	private AuthTask mAuth;
 	
 	private String mUser;
 	private String mPass;
+	
+	private Animation mFadeAnim;
 	
 	
 	@Override
@@ -34,6 +40,9 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
 		setContentView(R.layout.splash);
 		
 		mMe = this;
+		
+		mFadeAnim = AnimationUtils.loadAnimation(this, R.anim.slow_fade);
+		mIcon = (ImageView) findViewById(R.id.splash_icon);
 		
 		SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
     	mUser = settings.getString(PreferencesActivity.KEY_USER,"vizitator");
@@ -60,13 +69,13 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
 	@Override
 	public void onResume(){
 		super.onResume();
-		
+		mIcon.startAnimation(mFadeAnim);
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+		mIcon.clearAnimation();
 	}
 
 	@Override
