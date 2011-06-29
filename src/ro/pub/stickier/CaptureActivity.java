@@ -14,31 +14,19 @@ import ro.pub.stickier.camera.CameraManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -52,10 +40,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private ImageView expandDelimiter;
 	private ImageView mWaitView;
 	private boolean hasSurface;
-	private Vector<BarcodeFormat> decodeFormats;
-	//private HistoryManager historyManager;
-	private Result lastResult;
 	private String characterSet;
+	private Animation mFadeAnim;
 	
 	private static final float ACCEPT_LIMIT_DISTANCE = 50;
 	private Handler mTransitionHandler;
@@ -86,6 +72,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		
 		mOverlay.setDrawingCacheEnabled(true);
 		
+		mFadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade);
 		
 		//mHandler= new Handler();
 		
@@ -161,7 +148,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			}
 			
 			if (transition == null) {
-				transition = new TransitionThread(mOverlay, handler);
+				transition = new TransitionThread(mOverlay, handler, this);
 				transition.start();
 				mTransitionHandler = transition.getHandler();
 			}
@@ -184,7 +171,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	}
 
 	public void handleDecode(Result rawResult, Bitmap barcode) {
-		lastResult = rawResult;
 		ResultHandler resultHandler = new ResultHandler(this, rawResult);
 		//historyManager.addHistoryItem(rawResult, resultHandler);
 
@@ -235,7 +221,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				//Only if the new barcode is found far enough make it count
 				mTransitionHandler.sendMessage(Message.obtain(
 						mTransitionHandler, R.id.new_objective, 
-						new PolyState(corner, "test")));
+						new PolyState(corner, (String)resultHandler.getDisplayContents())));
 				
 				lastBarcodePosition[0] = corner[0];
 				lastBarcodePosition[1] = corner[1];
@@ -264,8 +250,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	
 	public void showWaiting(){
 		mWaitView.setVisibility(View.VISIBLE);
-		Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
-		mWaitView.startAnimation(animation);
+		mWaitView.startAnimation(mFadeAnim);
 	}
 	
 	public void hideWaiting(){

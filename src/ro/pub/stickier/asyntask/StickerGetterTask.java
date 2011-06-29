@@ -2,6 +2,7 @@ package ro.pub.stickier.asyntask;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -56,7 +57,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Bitmap> {
 	/*
 	 * Constructor
 	 */
-	public StickerGetterTask(String _stickerId, Activity _caller,StickerGetterCallback _callback){
+	public StickerGetterTask(String _stickerId, Activity _caller, StickerGetterCallback _callback){
 		stickerId = _stickerId;
 		caller = _caller;
 		callback = _callback;
@@ -83,12 +84,16 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Bitmap> {
 		//f = new File("/mnt/sdcard/stickercache/"+stickerId+".jpg");
 		
 		/*
-		 * Check weather the demanded resource is already in cache
+		 * Check whether the demanded resource is already in cache
 		 */
 		File f;
 		if ((f = new File(caller.getFilesDir(),stickerId + ".jpg")).exists()) {
 			cached = true;
-			stickerImage = BitmapFactory.decodeStream(new FileInputStream(f));
+			try {
+				stickerImage = BitmapFactory.decodeStream(new FileInputStream(f));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+			}
 		}
 		
 	}

@@ -90,9 +90,11 @@ public final class CaptureActivityHandler extends Handler {
 			break;
 		case R.id.show_waiting:
 			activity.showWaiting();
+			Log.d(TAG,"Primit mesaj show_waiting");
 			break;
 		case R.id.hide_waiting:
 			activity.hideWaiting();
+			Log.d(TAG,"Primit mesaj hide_waiting");
 			break;
 		}
 	}

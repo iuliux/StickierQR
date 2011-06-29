@@ -17,35 +17,15 @@ public class OverlayDrawer extends View {
 	
 	private Paint paint;
 	private Bitmap mBitmap;
-	private Handler mHandler;
 	
-	//rata de scalare (marire) a pozei afisate
-	private float scaleRatio = 1.0f;
 	//deplasarea in directia stanga sus a pozei
 	private float mOffset;
-	private float yOffset;
-	private int mBmpHeight;
-	private int mBmpWidth;
 	
 	private PolyState mCurrent;
 	
 	public OverlayDrawer(Context context, AttributeSet attrs){
 		super(context, attrs);
 		paint = new Paint();
-		paint.setARGB(255, 10, 200, 10);
-		paint.setStrokeWidth(8.0f);
-		
-		//de mutat in functia in care primeste poza de afisat
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ed202);
-		
-		Matrix  matrix = new Matrix();
-		matrix.postScale(scaleRatio, scaleRatio);
-		
-		mBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
-		
-		mBitmap.prepareToDraw();
-		mBmpHeight = mBitmap.getHeight();
-		mBmpWidth = mBitmap.getWidth();
 		
 		mOffset = 100;
 		
@@ -54,20 +34,20 @@ public class OverlayDrawer extends View {
 	
 	@Override
 	public void onDraw(Canvas canvas) {
-		if(mCurrent != null){
+		if(mCurrent != null && mBitmap != null){
 			
 			canvas.save();
-			canvas.drawBitmap(mBitmap, mCurrent.x - mOffset, mCurrent.y - yOffset, paint);
+			canvas.drawBitmap(mBitmap, mCurrent.x - mOffset, mCurrent.y - mOffset, paint);
 			canvas.restore();
 			
-			//Log.d(TAG, "ReDrawn!");
+			//Log.d(TAG, "Redrawn!");
 		} else { // TIMEOUT
 			
 		}
 	}
 	
 	public void recieve(PolyState newState, Bitmap bmp){
-		if(mCurrent == null || !mCurrent.sticker.equals(newState.sticker))
+		if(bmp != null)
 			mBitmap = bmp;
 		mCurrent = newState;
 		//Log.d(TAG, "Recieved!");
