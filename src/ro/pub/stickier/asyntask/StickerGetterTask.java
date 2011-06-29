@@ -44,7 +44,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 	/*
 	 * The resource should be cached using a file
 	 */
-	File f; 
+	//File f; 
 	
 	/*
 	 * Constructor
@@ -69,23 +69,16 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 		 * Get the folder asociated with the current app and create
 		 * a file to store the resource
 		 */
-		//f = new File(getFilesDir().getPath()+ "/" + resourceId + ".jpg");
+		//f = new File(caller.getFilesDir(),stickerId + ".jpg");
 		
 		//@Debugging
-		f = new File("/mnt/sdcard/stickercache/"+stickerId+".jpg");
+		//f = new File("/mnt/sdcard/stickercache/"+stickerId+".jpg");
 		
 		/*
 		 * Check weather the demanded resource is already in cache
 		 */
-		if (f.exists()) {
+		if (new File(caller.getFilesDir(),stickerId + ".jpg").exists()) {
 			cached = true;
-		} else {
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		
 	}
@@ -135,7 +128,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Boolean> {
 			
 			HttpEntity entity = response.getEntity();
 			
-			FileOutputStream output = new FileOutputStream(f);
+			FileOutputStream output = caller.openFileOutput(stickerId + ".jpg", 0);
 			
 			entity.writeTo(output);
 			
