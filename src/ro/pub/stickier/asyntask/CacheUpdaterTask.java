@@ -154,9 +154,9 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		cache.add(values[0]);
 		
 		if (cache.size() == 1){
-			Intent startDisplayActivity = new Intent(caller,DisplayActivity.class);
-			caller.startActivity(startDisplayActivity);
-			caller.finish();
+			
+			((DisplayActivity)caller).initView();
+			
 		}
 		
 		
@@ -167,7 +167,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		super.onPostExecute(result);
 				
 		if (cache != null && cache.size() == 0){
-			((WaitingActivity)caller).getStatus().setText("Empty feed");
+			((DisplayActivity)caller).status.setText("Empty feed");
 		}
 		
 	}

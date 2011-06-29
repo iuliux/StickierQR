@@ -3,6 +3,7 @@ package ro.pub.stickier;
 import ro.pub.stickier.asyntask.CacheUpdaterTask;
 import ro.pub.stickier.asyntask.FeedGenerateRequest;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,26 +18,48 @@ public class DisplayActivity extends Activity {
 	public Button next;
 	public Button back;
 	public TextView message;
+	public TextView status;
 	
+	public View before, after;
+	
+	public void initView(){
+	    fIndex = 1;
+	    bIndex = 0;
+	    back.setEnabled(false);
+	    message.setText(Application.cache.get(0));
+	    
+	    after.setVisibility(View.GONE);
+	    before.setVisibility(View.VISIBLE);
+	    if (Application.cache.size() < 2)
+	    	next.setEnabled(false);
+	    
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.display);
+		
+		if (!(Application.cache.getCacheId() != null && Application.cache.getCacheId().equals("stickier")))
+	    	new FeedGenerateRequest("sticker",this).execute();
+		else {
+			if (Application.cache.size()>0){
+				startActivity(new Intent(this,DisplayActivity.class));
+			} else {
+				status.setText("Empty feed");
+			}
+		}
 	    
-	    fIndex = 1;
-	    bIndex = 0;
-	    
+		before = (View)findViewById(R.id.before);
+		before.setVisibility(View.GONE);
+		
 	    next = (Button) findViewById(R.id.next);
 	    back = (Button) findViewById(R.id.back);
-	    
 	    message = (TextView)findViewById(R.id.message);
-	    
-	    message.setText(Application.cache.get(0));
+	    status = (TextView) findViewById(R.id.status);
 	    
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
-	    back.setEnabled(false);
 	    
 	    //new CacheUpdaterTask(this,"sticker").execute();
 	    

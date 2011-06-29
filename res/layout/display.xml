@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-    			
-    <TextView 	android:id="@+id/message"
-    			android:layout_height="fill_parent" 
-    			android:layout_weight="1" 
-    			android:layout_width="fill_parent" />
-    			
-    <TableLayout 	android:layout_width="fill_parent" 
-    				android:id="@+id/tableLayout1" 
-    				android:layout_height="wrap_content" 
-    				android:stretchColumns="*">
-    				
-        <TableRow 	android:id="@+id/tableRow1" 
-        			android:layout_width="wrap_content" 
-        			android:layout_height="wrap_content">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/big_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent" android:id="@+id/after">
         			
-            <Button android:id="@+id/back" 
-            		android:layout_height="wrap_content" 
-            		android:layout_width="wrap_content" 
-            		android:text="Back" />
-            		
-            <Button android:id="@+id/next" 
-            		android:layout_height="wrap_content" 
-            		android:layout_width="fill_parent" 
-            		android:text="Next" />
-            		
-        </TableRow>
+        <TextView 	android:id="@+id/message"
+        			android:layout_height="fill_parent" 
+        			android:layout_weight="1" 
+        			android:layout_width="fill_parent" />
+        			
+        <TableLayout 	android:layout_width="fill_parent" 
+        				android:id="@+id/tableLayout1" 
+        				android:layout_height="wrap_content" 
+        				android:stretchColumns="*">
+        				
+            <TableRow 	android:id="@+id/tableRow1" 
+            			android:layout_width="wrap_content" 
+            			android:layout_height="wrap_content">
+            			
+                <Button android:id="@+id/back" 
+                		android:layout_height="wrap_content" 
+                		android:layout_width="wrap_content" 
+                		android:text="Back" />
+                		
+                <Button android:id="@+id/next" 
+                		android:layout_height="wrap_content" 
+                		android:layout_width="fill_parent" 
+                		android:text="Next" />
+                		
+            </TableRow>
+            
+        </TableLayout>
         
-    </TableLayout>
-    
-</LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/before">
+        <TextView android:gravity="center" android:layout_gravity="center" android:id="@+id/status" android:text="Waiting for the first item of the feed" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="wrap_content"></TextView>
+        <ImageView android:id="@+id/imageView1" android:src="@drawable/icon_large" android:layout_gravity="center_vertical|center_horizontal|center" android:layout_width="wrap_content" android:layout_height="match_parent"></ImageView>
+    </LinearLayout>
+</FrameLayout>
