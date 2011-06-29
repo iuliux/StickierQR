@@ -157,6 +157,9 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 			
 			((DisplayActivity)caller).initView();
 			
+		} else {
+			if (((DisplayActivity)caller).index < cache.size() - 1)
+				((DisplayActivity)caller).next.setEnabled(true);		
 		}
 		
 		
@@ -169,6 +172,8 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		if (cache != null && cache.size() == 0){
 			((DisplayActivity)caller).status.setText("Empty feed");
 		}
+		
+		Log.d("CATE", ((Integer)Application.cache.size()).toString());
 		
 	}
 	

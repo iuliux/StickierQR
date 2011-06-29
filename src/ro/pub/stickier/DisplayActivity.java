@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 public class DisplayActivity extends Activity {
 	
-	int fIndex;
-	int bIndex;
+	//public int fIndex;
+	//public int bIndex;
+	
+	public int index; 
 	
 	public Button next;
 	public Button back;
@@ -23,14 +25,15 @@ public class DisplayActivity extends Activity {
 	public View before, after;
 	
 	public void initView(){
-	    fIndex = 1;
-	    bIndex = 0;
+	    //fIndex = 1;
+	    //bIndex = -1;
+		index = 0;
 	    back.setEnabled(false);
-	    message.setText(Application.cache.get(0));
+	    message.setText(Application.cache.get(index));
 	    
 	    before.setVisibility(View.GONE);
 	    after.setVisibility(View.VISIBLE);
-	    if (Application.cache.size() < 2)
+	    if (Application.cache.size() == 1)
 	    	next.setEnabled(false);
 	    
 	}
@@ -86,16 +89,32 @@ public class DisplayActivity extends Activity {
 	
 	class NextClick implements OnClickListener {
 		
-		public void onClick(View v) {
+//		public void onClick(View v) {
+//			
+//			back.setEnabled(true);
+//			if(fIndex == Application.cache.size() - 1)
+//				next.setEnabled(false);
+//
+//			message.setText(Application.cache.get(fIndex));
+//			if (fIndex < Application.cache.size() - 1){
+//				bIndex++;
+//				fIndex++;
+//			}
+//		}
+		
+		public void onClick(View v){
+			message.setText(Application.cache.get(++index));
 			
-			back.setEnabled(true);
-			if(fIndex == Application.cache.size() - 1)
+			if (index < Application.cache.size() - 1){
+				next.setEnabled(true);
+			} else {
 				next.setEnabled(false);
-
-			message.setText(Application.cache.get(fIndex));
-			if (fIndex < Application.cache.size() - 1){
-				bIndex++;
-				fIndex++;
+			}
+			
+			if (index > 0){
+				back.setEnabled(true);
+			} else {
+				back.setEnabled(false);
 			}
 		}
 
@@ -103,19 +122,35 @@ public class DisplayActivity extends Activity {
 	
 	class BackClick implements OnClickListener {
 			
-			public void onClick(View v) {
-				
-				message.setText(Application.cache.get(bIndex));
-				if (bIndex >0 ){
-					bIndex--;
-					fIndex--;
-				}
-				
+//			public void onClick(View v) {
+//				
+//				message.setText(Application.cache.get(bIndex));
+//				if (bIndex >0 ){
+//					bIndex--;
+//					fIndex--;
+//				}
+//				
+//				next.setEnabled(true);
+//				if(bIndex == 0)
+//					back.setEnabled(false);
+//				
+//			}	
+		
+		public void onClick(View v){
+			message.setText(Application.cache.get(--index));
+			
+			if (index < Application.cache.size() - 1){
 				next.setEnabled(true);
-				if(bIndex == 0)
-					back.setEnabled(false);
-				
-			}		
+			} else {
+				next.setEnabled(false);
+			}
+			
+			if (index > 0){
+				back.setEnabled(true);
+			} else {
+				back.setEnabled(false);
+			}
+		}
 	}
 	
 }
