@@ -106,7 +106,7 @@ private Activity caller;
 	    
 		//((DisplayActivity)caller).getFeedStatus().setText(result.toString());
 		if (result)		
-	    	new CacheUpdaterTask(caller,"sticker").execute();
+	    	new CacheUpdaterTask(caller,stickerId).execute();
 		else 
 			((DisplayActivity)caller).status.setText("Failed to issue request");
 		
