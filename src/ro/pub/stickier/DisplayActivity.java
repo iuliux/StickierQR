@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import static ro.pub.stickier.Application.*;
 
 public class DisplayActivity extends Activity {
-	
-	//public int fIndex;
-	//public int bIndex;
 	
 	public int index; 
 	
@@ -24,9 +24,10 @@ public class DisplayActivity extends Activity {
 	
 	public View before, after;
 	
+	public String stickerId;
+	
 	public void initView(){
-	    //fIndex = 1;
-	    //bIndex = -1;
+		
 		index = 0;
 	    back.setEnabled(false);
 	    message.setText(Application.cache.get(index));
@@ -42,7 +43,9 @@ public class DisplayActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.display);
-		
+	    
+	    stickerId = getIntent().getStringExtra("sticker");
+	    
 	    after = (View)findViewById(R.id.after);
 		before = (View)findViewById(R.id.before);
 		
@@ -54,21 +57,18 @@ public class DisplayActivity extends Activity {
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
 	    
-	    Application.cache.reset();
+	    if (cache.getCacheId() != null && cache.getCacheId().equals(stickerId)){
+	    	if (cache.size()>0){
+	    		initView();
+	    		return;
+	    	} else {
+	    		status.setText("Empty feed");
+	    	}
+	    } else {
+	    	new FeedGenerateRequest(stickerId,this).execute();
+	    }
 	    
-		if (!(Application.cache.getCacheId() != null && Application.cache.getCacheId().equals("stickier")))
-	    	new FeedGenerateRequest("sticker",this).execute();
-		else {
-			if (Application.cache.size()>0){
-				status.setText("Already in cache");
-				initView();
-				return;
-			} else {
-				status.setText("Empty feed");
-			}
-		}
-	    
-		after.setVisibility(View.GONE);
+	    after.setVisibility(View.GONE);
 	    
 	};
 	
@@ -88,20 +88,7 @@ public class DisplayActivity extends Activity {
 	}
 	
 	class NextClick implements OnClickListener {
-		
-//		public void onClick(View v) {
-//			
-//			back.setEnabled(true);
-//			if(fIndex == Application.cache.size() - 1)
-//				next.setEnabled(false);
-//
-//			message.setText(Application.cache.get(fIndex));
-//			if (fIndex < Application.cache.size() - 1){
-//				bIndex++;
-//				fIndex++;
-//			}
-//		}
-		
+				
 		public void onClick(View v){
 			message.setText(Application.cache.get(++index));
 			
@@ -120,21 +107,7 @@ public class DisplayActivity extends Activity {
 
 	}
 	
-	class BackClick implements OnClickListener {
-			
-//			public void onClick(View v) {
-//				
-//				message.setText(Application.cache.get(bIndex));
-//				if (bIndex >0 ){
-//					bIndex--;
-//					fIndex--;
-//				}
-//				
-//				next.setEnabled(true);
-//				if(bIndex == 0)
-//					back.setEnabled(false);
-//				
-//			}	
+	class BackClick implements OnClickListener {	
 		
 		public void onClick(View v){
 			message.setText(Application.cache.get(--index));
@@ -151,6 +124,6 @@ public class DisplayActivity extends Activity {
 				back.setEnabled(false);
 			}
 		}
-	}
-	
+		
+	}	
 }
