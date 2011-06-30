@@ -12,8 +12,8 @@
 	<string name="preferences_vibrate_title">Vibrate</string>
 	<string name="preferences_login_title">Login info</string>
 	<string name="preferences_login_info">Your login informations</string>
-	<string name="preferences_login_user">User name:</string>
-	<string name="preferences_login_pass">Password:</string>
+	<string name="preferences_login_user">username</string>
+	<string name="preferences_login_pass">pass</string>
 	<string name="preferences_login_summary">If you have a user name, you will receive information specific to your role.</string>
 	
 	<string name="splash_authenticating">Please wait while authenticating as </string>
@@ -32,6 +32,8 @@
 	<string name="feeder_url">https://and2sticker.appspot.com//feeder</string>
 	<string name="feed_generator_url">https://and2sticker.appspot.com//feedGenerator</string>
 	<string name="waiting_name">Waiting for feed</string>
+	<string name="preferences_user_title">Username</string>
+	<string name="preferences_pass_title">Password</string>
 	<string name="display_wait_item">Waiting for the first item of the feed</string>
 	<string name="display_empty_feed">Empty feed! This tag is probably not supported.</string>
 	<string name="display_failed_request">Failed to issue request</string>

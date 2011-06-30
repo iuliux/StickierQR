@@ -5,6 +5,7 @@ import ro.pub.stickier.asyntask.AuthTaskCallback;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -44,9 +45,12 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
 		mFadeAnim = AnimationUtils.loadAnimation(this, R.anim.slow_fade);
 		mIcon = (ImageView) findViewById(R.id.splash_icon);
 		
-		SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-    	mUser = settings.getString(PreferencesActivity.KEY_USER,"vizitator");
-    	mPass = settings.getString(PreferencesActivity.KEY_PASS,"vizitator");
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	
+		//Toast.makeText(this, settings.getString("username","fraier"), Toast.LENGTH_SHORT).show();
+		
+		mUser = settings.getString(getString(R.string.preferences_login_user),"vizitator");
+    	mPass = settings.getString(getString(R.string.preferences_login_pass),"vizitator");
     	
     	mRetry = (Button) findViewById(R.id.retry);
     	mTextbox = (TextView) findViewById(R.id.textbox);
