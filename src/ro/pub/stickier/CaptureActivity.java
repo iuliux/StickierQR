@@ -19,14 +19,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -83,7 +86,18 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		});
 		
 		
-		mOverlay.setOnClickListener(dispListener);
+		expandActionButton.setOnClickListener(dispListener);
+		
+		mOverlay.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.d(TAG,"Touch: ["+event.getX()+", "+event.getY()+"]");
+				
+				return true;
+			}
+			
+		});
 	}
 	
 	private class DisplayCommandListenter implements View.OnClickListener{
@@ -164,6 +178,13 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				mTransitionHandler = transition.getHandler();
 			}
 			
+			// Hide things that remained from before expanding
+			// This is for when user arrives back from DisplayActivity
+			mOverlay.recieve(null, null);
+			mOverlay.postInvalidate();
+			hideExpandActionButton();
+			
+			// Request camera autofocus once at the begining
 			handler.sendEmptyMessage(R.id.auto_focus);
 			
 		} catch (IOException ioe) {

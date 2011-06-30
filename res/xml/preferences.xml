@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference android:title="@string/preferences_user_title" android:key="@string/preferences_login_user"></EditTextPreference>
-    <EditTextPreference android:title="@string/preferences_pass_title" android:key="@string/preferences_login_pass" android:password="true"></EditTextPreference>
-    
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="@string/preferences_actions_title">
+    <CheckBoxPreference
+        android:key="preferences_play_beep"
+        android:defaultValue="false"
+        android:title="@string/preferences_play_beep_title"/>
+    <CheckBoxPreference
+        android:key="preferences_vibrate"
+        android:defaultValue="true"
+        android:title="@string/preferences_vibrate_title"/>
+  </PreferenceCategory>
+  
+  <PreferenceCategory android:title="@string/preferences_login_title">
+    <ro.pub.stickier.LoginPreference android:title="@string/preferences_login_info" 
+    					android:key="@string/preferences_login_user"
+    					android:summary="@string/preferences_login_summary" />
+  </PreferenceCategory>
+  
+  <PreferenceCategory android:title="@string/preferences_advanced">
+  	<Preference
+        android:key="preferences_clear_cache"
+        android:title="@string/preferences_clear_cache_title"
+        android:summary="@string/preferences_clear_cache_summary" />
+  </PreferenceCategory>
 </PreferenceScreen>

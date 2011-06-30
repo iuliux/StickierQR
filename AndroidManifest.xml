@@ -23,7 +23,8 @@
     	</activity>
         
         <activity android:name=".PreferencesActivity"
-        	      android:label="@string/preferences_name">
+        	      android:label="@string/preferences_name"
+        	      android:screenOrientation="portrait">
     	</activity>
     	
     	<activity android:name=".DisplayActivity"

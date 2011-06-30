@@ -11,10 +11,13 @@
 	<string name="preferences_play_beep_title">Beep</string>
 	<string name="preferences_vibrate_title">Vibrate</string>
 	<string name="preferences_login_title">Login info</string>
-	<string name="preferences_login_info">Your login informations</string>
+	<string name="preferences_login_info">Account informations</string>
 	<string name="preferences_login_user">username</string>
 	<string name="preferences_login_pass">pass</string>
 	<string name="preferences_login_summary">If you have a user name, you will receive information specific to your role.</string>
+	<string name="preferences_advanced">Advanced</string>
+	<string name="preferences_clear_cache_title">Clear cache</string>
+	<string name="preferences_clear_cache_summary">May be used either to free space or to refresh the data.</string>
 	
 	<string name="splash_authenticating">Please wait while authenticating as </string>
 	<string name="splash_authenticated">[Success] Authenticated as </string>
@@ -26,7 +29,6 @@
 	<string name="splash_retrying">Retrying to authenticate... please wait</string>
 	
 	<string name="display_name">Information</string>
-	<string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales euismod leo, molestie sollicitudin odio tristique vel. Etiam tincidunt venenatis dolor, quis vehicula leo aliquam vel. In vestibulum aliquam sollicitudin. Praesent tincidunt ultricies imperdiet. Suspendisse dignissim, mi accumsan tincidunt iaculis, turpis nisl venenatis leo, nec cursus leo diam at dui. Vivamus in mauris eu neque egestas consequat non eu tellus.</string>
 	<string name="sticker_image_feeder_url">https://and2sticker.appspot.com//stickerImageFeeder</string>
 	<string name="auth_url">https://and2sticker.appspot.com//newSession</string>
 	<string name="feeder_url">https://and2sticker.appspot.com//feeder</string>
@@ -34,6 +36,9 @@
 	<string name="waiting_name">Waiting for feed</string>
 	<string name="preferences_user_title">Username</string>
 	<string name="preferences_pass_title">Password</string>
+	<string name="preferences_login_now_button">Login</string>
+	<string name="preferences_login_save_button">Just save</string>
+	<string name="preferences_login_cancel_button">Cancel</string>
 	<string name="display_wait_item">Waiting for the first item of the feed</string>
 	<string name="display_empty_feed">Empty feed! This tag is probably not supported.</string>
 	<string name="display_failed_request">Failed to issue request</string>

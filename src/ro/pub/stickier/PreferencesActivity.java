@@ -1,19 +1,61 @@
+/*
+ * Copyright (C) 2008 ZXing authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package ro.pub.stickier;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.CheckBoxPreference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
-public class PreferencesActivity extends PreferenceActivity {
+
+/**
+ * The main settings activity.
+ *
+ * @author dswitkin@google.com (Daniel Switkin)
+ */
+public final class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	
+	private static final String TAG = ro.pub.stickier.PreferencesActivity.class.getSimpleName();
+
+	public static final String KEY_PLAY_BEEP = "preferences_play_beep";
+	public static final String KEY_VIBRATE = "preferences_vibrate";
+	
+	public static final String KEY_USER = "preferences_user";
+	public static final String KEY_PASS = "preferences_pass";
+
+	public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preference);
+	protected void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		addPreferencesFromResource(R.xml.preferences);
+
+		PreferenceScreen preferences = getPreferenceScreen();
+		preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		//decode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
 		
 		EditTextPreference pass = (EditTextPreference)findPreference(getString(R.string.preferences_login_pass));
-		
 	}
-	
+
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+	}
+
 }

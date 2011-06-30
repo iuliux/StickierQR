@@ -9,9 +9,10 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
-public class OverlayDrawer extends View {
+public class OverlayDrawer extends View implements View.OnTouchListener {
 
 	private static final String TAG = OverlayDrawer.class.getSimpleName();
 	
@@ -51,5 +52,12 @@ public class OverlayDrawer extends View {
 			mBitmap = bmp;
 		mCurrent = newState;
 		//Log.d(TAG, "Recieved!");
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		
+		return true;
 	}
 }
