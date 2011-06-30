@@ -16,6 +16,7 @@
 
 package ro.pub.stickier;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -88,9 +89,9 @@ public class LoginPreference extends Preference {
 		});
         
         username = (EditText) dialog.findViewById(R.id.login_user);
-        username.setText(prefs.getString(mContext.getString(R.string.preferences_login_user), "Undefined"));
+        username.setText(prefs.getString(mContext.getString(R.string.preferences_login_user), "vizitator"));
         password = (EditText) dialog.findViewById(R.id.login_user);
-        password.setText(prefs.getString(mContext.getString(R.string.preferences_login_pass), "Undefined"));
+        password.setText(prefs.getString(mContext.getString(R.string.preferences_login_pass), "vizitator"));
 
         save =  (Button) dialog.findViewById(R.id.login_save_button);
         save.setOnClickListener(new OnClickListener() {
@@ -123,8 +124,10 @@ public class LoginPreference extends Preference {
 				edit.putString(mContext.getString(R.string.preferences_login_pass), password.getText().toString());
 				edit.commit();
 				
-				mContext.startActivity(new Intent(mContext,SplashActivity.class));
+				Intent intent = new Intent(mContext, SplashActivity.class);
+				mContext.startActivity(intent);
 				
+				((Activity) mContext).finish();
 			}
 		});
         

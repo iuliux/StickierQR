@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -148,6 +149,17 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		
 		CameraManager.get().closeDriver();
 	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_MENU) {
+	    	Intent intent = new Intent(getApplicationContext(), PreferencesActivity.class);
+	    	startActivity(intent);
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
 
 	public void surfaceCreated(SurfaceHolder holder) {
 		if (!hasSurface) {

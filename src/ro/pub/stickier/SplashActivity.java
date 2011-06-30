@@ -89,7 +89,10 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
 		
 		if(success){
 			Toast.makeText(this, getString(R.string.splash_authenticated) + " " + Application.authUsername, Toast.LENGTH_SHORT).show();
-			startActivity(new Intent(this, CaptureActivity.class));
+			
+			Intent intent = new Intent(this, CaptureActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			//Now finish the caller activity, so when the user wants to come back he won't see this again
 			finish();
 		} else {

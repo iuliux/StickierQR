@@ -18,6 +18,7 @@
 	<string name="preferences_advanced">Advanced</string>
 	<string name="preferences_clear_cache_title">Clear cache</string>
 	<string name="preferences_clear_cache_summary">May be used either to free space or to refresh the data.</string>
+	<string name="preferences_cache_cleared">Cache cleared!</string>
 	
 	<string name="splash_authenticating">Please wait while authenticating as </string>
 	<string name="splash_authenticated">[Success] Authenticated as </string>
