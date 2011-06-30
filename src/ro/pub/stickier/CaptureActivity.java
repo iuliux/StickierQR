@@ -182,6 +182,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			// Creating the handler starts the preview, which can also throw a RuntimeException.
 			if (handler == null) {
 				handler = new CaptureActivityHandler(this, characterSet);
+//==============================================================
+				mOverlay.recieveActivityHandler(handler);
+//==============================================================
 			}
 			
 			if (transition == null) {

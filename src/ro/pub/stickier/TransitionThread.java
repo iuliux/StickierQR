@@ -187,6 +187,7 @@ public class TransitionThread extends Thread implements StickerGetterCallback {
 		state = State.NOTHING;
 		initialized = true;
 		mGraphics.recieve(mCurrent, mBitmap);
-		mActivityHandler.sendEmptyMessage(R.id.hide_waiting);
+//==============================================================
+		//mActivityHandler.sendEmptyMessage(R.id.hide_waiting);
 	}
 }

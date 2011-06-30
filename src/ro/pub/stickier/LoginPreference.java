@@ -90,7 +90,7 @@ public class LoginPreference extends Preference {
         
         username = (EditText) dialog.findViewById(R.id.login_user);
         username.setText(prefs.getString(mContext.getString(R.string.preferences_login_user), "vizitator"));
-        password = (EditText) dialog.findViewById(R.id.login_user);
+        password = (EditText) dialog.findViewById(R.id.login_pass);
         password.setText(prefs.getString(mContext.getString(R.string.preferences_login_pass), "vizitator"));
 
         save =  (Button) dialog.findViewById(R.id.login_save_button);

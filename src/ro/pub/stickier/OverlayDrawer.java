@@ -23,6 +23,7 @@ public class OverlayDrawer extends View implements View.OnTouchListener {
 	private float mOffset;
 	
 	private PolyState mCurrent;
+	private Handler mActivityHandler;
 	
 	public OverlayDrawer(Context context, AttributeSet attrs){
 		super(context, attrs);
@@ -37,6 +38,10 @@ public class OverlayDrawer extends View implements View.OnTouchListener {
 	public void onDraw(Canvas canvas) {
 		if(mCurrent != null && mBitmap != null){
 			
+//==============================================================
+			mActivityHandler.sendEmptyMessage(R.id.hide_waiting);
+//==============================================================
+			
 			canvas.save();
 			canvas.drawBitmap(mBitmap, mCurrent.x - mOffset, mCurrent.y - mOffset, paint);
 			canvas.restore();
@@ -46,6 +51,12 @@ public class OverlayDrawer extends View implements View.OnTouchListener {
 			
 		}
 	}
+	
+//==============================================================	
+	public void recieveActivityHandler(Handler h){
+		mActivityHandler = h;
+	}
+//==============================================================
 	
 	public void recieve(PolyState newState, Bitmap bmp){
 		if(bmp != null)
