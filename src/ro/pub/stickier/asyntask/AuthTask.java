@@ -94,7 +94,12 @@ public class AuthTask extends AsyncTask<String,String,Integer> {
 			
 			HttpResponse response = client.execute(post);
 			
-			authUsername = response.getFirstHeader("username").getValue();
+			if (response.getStatusLine().getStatusCode() == 200){
+				authUsername = username;
+			} else {
+				authUsername = "vizitator";
+			}
+			
 			
 		} catch (ClientProtocolException e) {
 			//Log.e("RESPONSE", "Protocol Problem");
