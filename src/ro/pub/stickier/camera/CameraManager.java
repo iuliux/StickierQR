@@ -252,13 +252,13 @@ public final class CameraManager {
       // about the Y channel, so allow it.
       case PixelFormat.YCbCr_422_SP:
         return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-            rect.width(), rect.height(), false);
+            rect.width(), rect.height());
       default:
         // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
         // Fortunately, it too has all the Y data up front, so we can read it.
         if ("yuv420p".equals(previewFormatString)) {
           return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-              rect.width(), rect.height(), false);
+              rect.width(), rect.height());
         }
     }
     throw new IllegalArgumentException("Unsupported picture format: " +

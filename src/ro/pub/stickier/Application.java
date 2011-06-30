@@ -4,8 +4,6 @@ package ro.pub.stickier;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 public class Application extends android.app.Application {
 	

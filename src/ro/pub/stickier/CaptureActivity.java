@@ -214,30 +214,30 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		return handler;
 	}
 
-	public void handleDecode(Result rawResult, Bitmap barcode) {
+	public void handleDecode(Result rawResult, Pair barcodeDimmensions) {
 		ResultHandler resultHandler = new ResultHandler(this, rawResult);
 		//historyManager.addHistoryItem(rawResult, resultHandler);
 
-		if (barcode == null) {
+		/*if (barcode == null) {
 			// This is from history -- no saved barcode
 			handleDecodeInternally(rawResult, resultHandler, null);
-		} else {
+		} else {*/
 			//beepManager.playBeepSoundAndVibrate();
-			handleDecodeInternally(rawResult, resultHandler, barcode);
+			handleDecodeInternally(rawResult, resultHandler, barcodeDimmensions);
 			if (handler != null) {
 				handler.sendEmptyMessage(R.id.restart_preview);
 			}
-		}
+		//}
 	}
 
 	//E apelata cand un tag e gasit
 	//Se ocupa cu afisarea rezultatelor gasite
-	private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Bitmap barcode) {
-		if (barcode != null) {
+	private void handleDecodeInternally(Result rawResult, ResultHandler resultHandler, Pair barcodeDimmensions) {
+		if (barcodeDimmensions != null) {
 			
 			//dimensiunile imaginii initiale
-			final int pic_width  = barcode.getWidth();
-			final int pic_height = barcode.getHeight();
+			final int pic_width  = barcodeDimmensions.e1;
+			final int pic_height = barcodeDimmensions.e2;
 			//dimensiunile imaginii rotite
 			final int h = pic_width;
 			final int w = pic_height;

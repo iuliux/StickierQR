@@ -91,7 +91,7 @@ final class DecodeHandler extends Handler {
       Log.d(TAG, "Found barcode in " + (end - start) + " ms");
       Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
       Bundle bundle = new Bundle();
-      bundle.putParcelable(DecodeThread.BARCODE_BITMAP, source.renderCroppedGreyscaleBitmap());
+      bundle.putParcelable(DecodeThread.BARCODE_DIMMENSIONS, source.getCroppedBitmapDimmensions());
       message.setData(bundle);
       message.sendToTarget();
     } else {

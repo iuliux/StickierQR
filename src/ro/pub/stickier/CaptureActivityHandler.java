@@ -19,7 +19,6 @@ package ro.pub.stickier;
 import com.google.zxing.Result;
 import ro.pub.stickier.camera.CameraManager;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -76,9 +75,9 @@ public final class CaptureActivityHandler extends Handler {
 			state = State.SUCCESS;
 
 			Bundle bundle = message.getData();
-			Bitmap barcode = bundle == null ? null :
-				(Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
-			activity.handleDecode((Result) message.obj, barcode);
+			Pair barcodeDimmensions = bundle == null ? null :
+				(Pair) bundle.getParcelable(DecodeThread.BARCODE_DIMMENSIONS);
+			activity.handleDecode((Result) message.obj, barcodeDimmensions);
 			break;
 		case R.id.decode_failed:
 			// We're decoding as fast as possible, so when one decode fails, start another.
