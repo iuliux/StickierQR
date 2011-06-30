@@ -74,9 +74,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 		
 		mFadeAnim = AnimationUtils.loadAnimation(this, R.anim.fade);
 		
-		//mHandler= new Handler();
-		
-
 		settingsActionButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent().setClass(CaptureActivity.this, PreferencesActivity.class));
