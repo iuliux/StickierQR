@@ -4,6 +4,9 @@ package ro.pub.stickier;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 public class Application extends android.app.Application {
 	
 	static public Cache<String> cache = new Cache<String>();
@@ -17,5 +20,6 @@ public class Application extends android.app.Application {
 	 * The username used in the system
 	 */
 	public static String authUsername;
+
 	
 }

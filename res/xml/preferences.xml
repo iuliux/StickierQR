@@ -15,7 +15,7 @@
   <PreferenceCategory android:title="@string/preferences_login_title">
     <ro.pub.stickier.LoginPreference android:title="@string/preferences_login_info" 
     					android:key="@string/preferences_login_user"
-    					android:summary="@string/preferences_login_summary" />
+    					android:summary="@string/preferences_login_summary" />					
   </PreferenceCategory>
   
   <PreferenceCategory android:title="@string/preferences_advanced">

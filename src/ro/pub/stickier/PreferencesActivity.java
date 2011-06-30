@@ -21,9 +21,13 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-
+import android.view.View;
+import android.widget.Button;
+import static ro.pub.stickier.Application.*;
 
 /**
  * The main settings activity.
@@ -41,7 +45,20 @@ public final class PreferencesActivity extends PreferenceActivity implements OnS
 	public static final String KEY_PASS = "preferences_pass";
 
 	public static final String KEY_HELP_VERSION_SHOWN = "preferences_help_version_shown";
+	
+	public static final String KEY_CLEAR_CACHE = "preferences_clear_cache";
+	public static final String KEY_LOGIN_USER = "login_user";
+	public static final String KEY_LOGIN_PASS = "login_pass";
 
+	
+	/*
+	 * Fields for every setting
+	 * 
+	 * (non-Javadoc)
+	 * @see android.preference.PreferenceActivity#onCreate(android.os.Bundle)
+	 */
+	Preference clearCache;
+	
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -51,7 +68,17 @@ public final class PreferencesActivity extends PreferenceActivity implements OnS
 		preferences.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		//decode1D = (CheckBoxPreference) preferences.findPreference(KEY_DECODE_1D);
 		
-		EditTextPreference pass = (EditTextPreference)findPreference(getString(R.string.preferences_login_pass));
+		clearCache = findPreference(KEY_CLEAR_CACHE);
+		clearCache.setOnPreferenceClickListener( new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+			
+				cache.reset();
+				
+				return true;
+			}
+		});
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

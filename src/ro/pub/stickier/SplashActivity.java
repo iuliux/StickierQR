@@ -45,8 +45,10 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
 		mFadeAnim = AnimationUtils.loadAnimation(this, R.anim.slow_fade);
 		mIcon = (ImageView) findViewById(R.id.splash_icon);
 		
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		//SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	
+		SharedPreferences settings = getApplicationContext().getSharedPreferences("userpass", Context.MODE_PRIVATE);
+		
 		//Toast.makeText(this, settings.getString("username","fraier"), Toast.LENGTH_SHORT).show();
 		
 		mUser = settings.getString(getString(R.string.preferences_login_user),"vizitator");
