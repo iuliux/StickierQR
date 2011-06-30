@@ -1,37 +1,20 @@
 package ro.pub.stickier.asyntask;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 import org.apache.commons.io.IOUtils;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import ro.pub.stickier.DisplayActivity;
 import ro.pub.stickier.R;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
 
@@ -91,7 +74,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		 */
 		if (cached) return "Already in cache";
 		
-		Log.d("FEED D START", "Starting to download the feed");
+		//Log.d("FEED D START", "Starting to download the feed");
 		
 		/*
 		 * We reset the cache and set the new cacheId
@@ -99,7 +82,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		cache.reset();
 		cache.setCacheId(stickerId);
 		
-		Log.d("FEED ID", cache.getCacheId());
+		//Log.d("FEED ID", cache.getCacheId());
 		
 		HttpResponse response;
 		HttpEntity entity;
@@ -111,7 +94,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		 */			
 		feedLoop : for (;;){
 		
-		Log.d("FEED ITEM REQUEST", "-!-");	
+		//Log.d("FEED ITEM REQUEST", "-!-");	
 		
 		HttpPost post = new HttpPost(caller.getString(R.string.feeder_url));
 		
@@ -121,7 +104,7 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 			
 			StatusLine line = response.getStatusLine();
 			
-			Log.d("STATUS LINE", ((Integer)line.getStatusCode()).toString());
+			//Log.d("STATUS LINE", ((Integer)line.getStatusCode()).toString());
 			
 			if (line.getStatusCode() % 100 >= 4)
 				break feedLoop;
@@ -133,10 +116,10 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 			publishProgress(content);
 			
 		} catch (ClientProtocolException e) {
-			Log.e("RESPONSE ERROR", "Protocol Problem");
+			//Log.e("RESPONSE ERROR", "Protocol Problem");
 			return "Protocol Problem";
 		} catch (IOException e) {
-			Log.e("RESPONSE ERROR", "IO Exception");
+			//Log.e("RESPONSE ERROR", "IO Exception");
 			e.printStackTrace();
 			return "IO Exception";
 		}}
@@ -170,10 +153,11 @@ public class CacheUpdaterTask extends AsyncTask<String,String,String> {
 		super.onPostExecute(result);
 				
 		if (cache != null && cache.size() == 0){
-			((DisplayActivity)caller).status.setText("Empty feed");
+			//Empty feed
+			((DisplayActivity)caller).showWrong();
 		}
 		
-		Log.d("CATE", ((Integer)Application.cache.size()).toString());
+		//Log.d("CATE", ((Integer)Application.cache.size()).toString());
 		
 	}
 	

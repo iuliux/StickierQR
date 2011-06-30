@@ -183,7 +183,6 @@ public final class CameraManager {
    * Asks the camera hardware to perform an autofocus.
    *
    * @param handler The Handler to notify when the autofocus completes.
-   * @param message The message to deliver.
    */
   public void requestAutoFocus(Handler handler) {
     if (camera != null && previewing) {

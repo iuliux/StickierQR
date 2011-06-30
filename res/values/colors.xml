@@ -3,4 +3,5 @@
 <resources>
   <color name="splash_bg">#ff333434</color>
   <color name="transparent">#00000000</color>
+  <color name="text_boxed">#ffffffff</color>
 </resources>

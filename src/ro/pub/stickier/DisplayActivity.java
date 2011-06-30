@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
 
@@ -21,6 +23,9 @@ public class DisplayActivity extends Activity {
 	public Button back;
 	public TextView message;
 	public TextView status;
+	private ImageView waiting;
+	private ImageView wrong;
+	private Animation mFadeAnim;
 	
 	public View before, after;
 	
@@ -32,6 +37,7 @@ public class DisplayActivity extends Activity {
 	    back.setEnabled(false);
 	    message.setText(Application.cache.get(index));
 	    
+	    waiting.clearAnimation();
 	    before.setVisibility(View.GONE);
 	    after.setVisibility(View.VISIBLE);
 	    if (Application.cache.size() == 1)
@@ -53,6 +59,10 @@ public class DisplayActivity extends Activity {
 	    back = (Button) findViewById(R.id.back);
 	    message = (TextView)findViewById(R.id.message);
 	    status = (TextView) findViewById(R.id.status);
+	    waiting = (ImageView) findViewById(R.id.display_waiting);
+	    wrong = (ImageView) findViewById(R.id.display_wrong);
+	    
+	    mFadeAnim = AnimationUtils.loadAnimation(this, R.anim.slow_fade);
 	    
 	    next.setOnClickListener(new NextClick());
 	    back.setOnClickListener(new BackClick());
@@ -62,7 +72,7 @@ public class DisplayActivity extends Activity {
 	    		initView();
 	    		return;
 	    	} else {
-	    		status.setText("Empty feed");
+	    		showWrong();
 	    	}
 	    } else {
 	    	new FeedGenerateRequest(stickerId,this).execute();
@@ -74,17 +84,21 @@ public class DisplayActivity extends Activity {
 	
 	@Override
 	protected void onPause() {
-		super.onPause();	
+		super.onPause();
+		waiting.clearAnimation();
 	}
 	
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onResume() {
+		super.onResume();
+		waiting.startAnimation(mFadeAnim);
 	}
 	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();		
+	public void showWrong(){
+		status.setText(getString(R.string.display_empty_feed));
+		waiting.clearAnimation();
+		waiting.setVisibility(View.GONE);
+		wrong.setVisibility(View.VISIBLE);
 	}
 	
 	class NextClick implements OnClickListener {
