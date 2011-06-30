@@ -47,6 +47,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private Handler mTransitionHandler;
 	private TransitionThread transition;
 	private float[] lastBarcodePosition;
+	
+	private DisplayCommandListenter dispListener = new DisplayCommandListenter();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,11 +81,23 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				startActivity(new Intent().setClass(CaptureActivity.this, PreferencesActivity.class));
 			}
 		});
-		mOverlay.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				startActivity(new Intent().setClass(CaptureActivity.this, DisplayActivity.class));
-			}
-		});
+		
+		
+		mOverlay.setOnClickListener(dispListener);
+	}
+	
+	private class DisplayCommandListenter implements View.OnClickListener{
+		
+		String stickerId = "default";
+		
+		@Override
+		public void onClick(View v) {
+			
+			Intent i = new Intent(CaptureActivity.this, DisplayActivity.class);
+			i.putExtra("sticker", stickerId);
+			startActivity(i);
+			
+		}
 	}
 
 	@Override
@@ -218,8 +232,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				//Only if the new barcode is found far enough make it count
 				mTransitionHandler.sendMessage(Message.obtain(
 						mTransitionHandler, R.id.new_objective, 
-						new PolyState(corner, (String)resultHandler.getDisplayContents())));
-				
+						new PolyState(corner, dispListener.stickerId = (String)resultHandler.getDisplayContents())));
+								
 				lastBarcodePosition[0] = corner[0];
 				lastBarcodePosition[1] = corner[1];
 			}
