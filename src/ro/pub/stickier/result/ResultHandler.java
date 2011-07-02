@@ -55,7 +55,7 @@ public class ResultHandler {
    *
    * @return The text to be displayed.
    */
-  public CharSequence getDisplayContents() {
+  public String getDisplayContents() {
     String contents = result.getDisplayResult();
     return contents.replace("\r", "");
   }

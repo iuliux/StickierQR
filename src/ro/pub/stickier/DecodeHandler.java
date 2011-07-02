@@ -20,6 +20,7 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
@@ -65,7 +66,7 @@ final class DecodeHandler extends Handler {
   }
 
   /**
-   * Decode the data within the viewfinder rectangle, and time how long it took. For efficiency,
+   * Decode the data within the viewfinder, and time how long it took. For efficiency,
    * reuse the same reader objects from one decode to the next.
    *
    * @param data   The YUV preview frame.
@@ -73,10 +74,13 @@ final class DecodeHandler extends Handler {
    * @param height The height of the preview frame.
    */
   private void decode(byte[] data, int width, int height) {
-    long start = System.currentTimeMillis();
+    //long start = System.currentTimeMillis();
     Result rawResult = null;
     PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);
-    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+    
+    // Foloseste HybridBinarizer sau GlobalHistogramBinarizer.
+    // Cica HybridBinarizer e mai bun dar mai lent.
+    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
     try {
       rawResult = qrReader.decode(bitmap,hints);
     } catch (ReaderException re) {
@@ -86,9 +90,8 @@ final class DecodeHandler extends Handler {
     }
 
     if (rawResult != null) {
-      // Don't log the barcode contents for security.
-      long end = System.currentTimeMillis();
-      Log.d(TAG, "Found barcode in " + (end - start) + " ms");
+      //long end = System.currentTimeMillis();
+      //Log.d(TAG, "Found barcode in " + (end - start) + " ms");
       Message message = Message.obtain(activity.getHandler(), R.id.decode_succeeded, rawResult);
       Bundle bundle = new Bundle();
       bundle.putParcelable(DecodeThread.BARCODE_DIMMENSIONS, source.getCroppedBitmapDimmensions());

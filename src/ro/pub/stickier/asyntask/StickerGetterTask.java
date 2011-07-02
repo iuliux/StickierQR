@@ -14,22 +14,19 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import ro.pub.stickier.R;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.PixelFormat;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.Toast;
 
 import static ro.pub.stickier.Application.*;
 
@@ -114,7 +111,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Bitmap> {
 			return stickerImage;
 		}
 		
-		Log.d("REQUEST", "New request for sticker");
+		//Log.d("REQUEST", "New request for sticker");
 		
 		HttpPost post = new HttpPost(caller.getString(R.string.sticker_image_feeder_url));
 		
@@ -126,7 +123,7 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Bitmap> {
 		try {
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 		} catch (UnsupportedEncodingException e) {
-			Log.e("URL", "URL Encoded Exception");
+			//Log.e("URL", "URL Encoded Exception");
 			return null;
 		}
 		
@@ -152,14 +149,35 @@ public class StickerGetterTask extends AsyncTask<String,Integer,Bitmap> {
 			output.flush();
 			output.close();
 			
-			stickerImage = BitmapFactory.decodeStream(new FileInputStream(
-					new File(caller.getFilesDir(),stickerId + ".jpg")));
+			BitmapFactory.Options opts = new BitmapFactory.Options();
+			final int windowFormat = caller.getWindow().getAttributes().format;
+			DisplayMetrics metrics = new DisplayMetrics();
+			caller.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			
+			opts.inDither = true;
+			opts.inDensity = DisplayMetrics.DENSITY_HIGH;
+			opts.inTargetDensity = metrics.densityDpi;
+			
+			switch(windowFormat){
+				case PixelFormat.RGB_565:
+				case PixelFormat.OPAQUE:
+					opts.inPreferredConfig = Bitmap.Config.RGB_565;
+					break;
+				case PixelFormat.RGBA_8888:
+				default:
+					opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+					break;
+			}
+			stickerImage = BitmapFactory.decodeStream(
+					new FileInputStream(new File(caller.getFilesDir(),stickerId + ".jpg")),
+					null,
+					opts);
 					
 		} catch (ClientProtocolException e) {
-			Log.e("RESPONSE", "Protocol Problem");
+			//Log.e("RESPONSE", "Protocol Problem");
 			return null;
 		} catch (IOException e) {
-			Log.e("RESPONSE", "IO Exception");
+			//Log.e("RESPONSE", "IO Exception");
 			e.printStackTrace();
 			return null;
 		}

@@ -43,9 +43,9 @@ public final class CaptureActivityHandler extends Handler {
 		DONE
 	}
 
-	CaptureActivityHandler(CaptureActivity activity, String characterSet) {
+	CaptureActivityHandler(CaptureActivity activity) {
 		this.activity = activity;
-		decodeThread = new DecodeThread(activity, characterSet);
+		decodeThread = new DecodeThread(activity);
 		decodeThread.start();
 		state = State.SUCCESS;
 

@@ -38,17 +38,12 @@ final class DecodeThread extends Thread {
   private Handler handler;
   private final CountDownLatch handlerInitLatch;
 
-  DecodeThread(CaptureActivity activity,
-               String characterSet) {
+  DecodeThread(CaptureActivity activity) {
 
     this.activity = activity;
     handlerInitLatch = new CountDownLatch(1);
 
     hints = new Hashtable<DecodeHintType, Object>(3);
-
-    if (characterSet != null) {
-      hints.put(DecodeHintType.CHARACTER_SET, characterSet);
-    }
   }
 
   Handler getHandler() {

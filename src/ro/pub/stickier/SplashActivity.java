@@ -6,6 +6,7 @@ import ro.pub.stickier.asyntask.AuthTaskCallback;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PixelFormat;
 
 public class SplashActivity extends Activity implements AuthTaskCallback {
 
@@ -70,6 +72,11 @@ public class SplashActivity extends Activity implements AuthTaskCallback {
     			mAuth.execute();
     		}
     	});
+    	
+    	Log.d("PixelFormat", "format = " + getWindow().getAttributes().format);
+    	Log.d("PixelFormat", "565 = " + PixelFormat.RGB_565);
+    	Log.d("PixelFormat", "OPAQUE = " + PixelFormat.OPAQUE);
+    	Log.d("PixelFormat", "8888 = " + PixelFormat.RGBA_8888);
 	}
 	
 	@Override

@@ -1,9 +1,7 @@
 package ro.pub.stickier;
 
 import java.io.IOException;
-import java.util.Vector;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
@@ -14,7 +12,6 @@ import ro.pub.stickier.camera.CameraManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,7 +27,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
@@ -44,7 +40,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 	private ImageView expandDelimiter;
 	private ImageView mWaitView;
 	private boolean hasSurface;
-	private String characterSet;
 	private Animation mFadeAnim;
 	
 	private static final float ACCEPT_LIMIT_DISTANCE = 50;
@@ -181,7 +176,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 			CameraManager.get().openDriver(surfaceHolder);
 			// Creating the handler starts the preview, which can also throw a RuntimeException.
 			if (handler == null) {
-				handler = new CaptureActivityHandler(this, characterSet);
+				handler = new CaptureActivityHandler(this);
 //==============================================================
 				mOverlay.recieveActivityHandler(handler);
 //==============================================================
@@ -268,7 +263,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 				//Only if the new barcode is found far enough make it count
 				mTransitionHandler.sendMessage(Message.obtain(
 						mTransitionHandler, R.id.new_objective, 
-						new PolyState(corner, dispListener.stickerId = (String)resultHandler.getDisplayContents())));
+						new PolyState(corner, dispListener.stickerId = resultHandler.getDisplayContents())));
 								
 				lastBarcodePosition[0] = corner[0];
 				lastBarcodePosition[1] = corner[1];
