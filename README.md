@@ -7,7 +7,7 @@ PoliInfo is an augmented reality application, aimed to provide location and iden
 
 About
 -----
-Academic project that involves Android platform for client-side and GoogleAppEngine for server-side.
+Academic project that involves Android platform for client-side and GoogleAppEngine for server-side. Project page on [PUB wiki](http://curs.pub.ro/index.php/android-projects/159-poliinfo-reader).
 
 Screenshots
 -----------
