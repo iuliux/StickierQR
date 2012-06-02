@@ -27,4 +27,10 @@ The other alternatives were `GPS` or `GSM-based`, but neither provided the accur
 
 For instance, a student located in the "EG hallway" area is probably interested in knowing how to get to EC 004 lecture room, not AN 030 (location based) or a person from the maintenance department may consider guidance related info irrelevant since he or she already knows that place like the back of his/her hand but that person may be interested in knowing what kind of maintenance operations were conducted in that area (identity based).
 
+Authors
+-------
+
+  * Radu Stoenescu
+  * Iulius Curt
+
 ##### QR recognition based on [ZXing](http://code.google.com/p/zxing/) OpenSource project
